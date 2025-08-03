@@ -1,0 +1,28 @@
+[
+  {
+    "id": "6f161411-b2d5-46bc-b18d-c8b579b37443",
+    "data": [
+      {
+        "text": "\"Which payment methods do you accept?\"\r \"What payment options are available?\"\r \"Can I pay by credit card?\"\r \"Do you accept PayPal?\"\r \"Is cash on delivery available?\"\r \"How can I pay for my order?\"\r \"What payment types do you support?\"\r \"Do you accept debit cards?\"\r \"Can I pay online?\"\r \"Are there EMI options?\"\r \"What payment methods do you have?\"\r \"Can I use net banking?\"\r \"Is mobile wallet payment accepted?\"\r \"Do you accept UPI payments?\"\r \"Can I pay using a gift card?\"",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  },
+  {
+    "id": "6971cdd3-8354-4dfe-973c-79f7bcec41b3",
+    "data": [
+      {
+        "text": "“What payment methods do you accept?”  “Can I pay on delivery?”  “Payment options”",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

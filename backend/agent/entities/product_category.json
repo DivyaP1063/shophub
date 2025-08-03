@@ -1,0 +1,9 @@
+{
+  "id": "954cd599-e16d-4711-a7f6-42c7facb2da3",
+  "name": "product_category",
+  "isOverridable": true,
+  "isEnum": false,
+  "isRegexp": false,
+  "automatedExpansion": false,
+  "allowFuzzyExtraction": false
+}

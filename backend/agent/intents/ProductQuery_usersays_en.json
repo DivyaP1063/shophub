@@ -1,0 +1,608 @@
+[
+  {
+    "id": "3eaa4694-896e-41e1-8db8-de9518bffd6b",
+    "data": [
+      {
+        "text": "\"I want a ",
+        "userDefined": false
+      },
+      {
+        "text": "tshirt",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Show me ",
+        "userDefined": false
+      },
+      {
+        "text": "jackets",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Do you have ",
+        "userDefined": false
+      },
+      {
+        "text": "jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"I\u0027m looking for ",
+        "userDefined": false
+      },
+      {
+        "text": "shoes",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Show me ",
+        "userDefined": false
+      },
+      {
+        "text": "dresses",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Do you have ",
+        "userDefined": false
+      },
+      {
+        "text": "hats",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"Find me a ",
+        "userDefined": false
+      },
+      {
+        "text": "shirt",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"What kind of ",
+        "userDefined": false
+      },
+      {
+        "text": "jackets",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " do you have?\"\n \"Any ",
+        "userDefined": false
+      },
+      {
+        "text": "jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " in stock?\"\n \"Show me some ",
+        "userDefined": false
+      },
+      {
+        "text": "hoodies",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"I want to see some ",
+        "userDefined": false
+      },
+      {
+        "text": "shirts",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \n \"Do you have ",
+        "userDefined": false
+      },
+      {
+        "text": "t-shirts",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " under ",
+        "userDefined": false
+      },
+      {
+        "text": "500",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"Show me ",
+        "userDefined": false
+      },
+      {
+        "text": "shoes",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " below ",
+        "userDefined": false
+      },
+      {
+        "text": "1000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Any ",
+        "userDefined": false
+      },
+      {
+        "text": "jackets",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " cheaper than ",
+        "userDefined": false
+      },
+      {
+        "text": "3000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"Find me a ",
+        "userDefined": false
+      },
+      {
+        "text": "dress",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " under ",
+        "userDefined": false
+      },
+      {
+        "text": "1500",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"",
+        "userDefined": false
+      },
+      {
+        "text": "Jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " less than ",
+        "userDefined": false
+      },
+      {
+        "text": "1200",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": " rupees\"\n \"",
+        "userDefined": false
+      },
+      {
+        "text": "Hat",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " below ",
+        "userDefined": false
+      },
+      {
+        "text": "700",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \n\n\n\"Suggest a cheap ",
+        "userDefined": false
+      },
+      {
+        "text": "t-shirt",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"List all available products below ",
+        "userDefined": false
+      },
+      {
+        "text": "1000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Show me something under ",
+        "userDefined": false
+      },
+      {
+        "text": "800",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": " \"Suggest a ",
+        "userDefined": false
+      },
+      {
+        "text": "jacket",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " under ",
+        "userDefined": false
+      },
+      {
+        "text": "2000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  },
+  {
+    "id": "7d228136-6eae-4a11-8827-7bcc7135bee1",
+    "data": [
+      {
+        "text": "\"I want a ",
+        "userDefined": false
+      },
+      {
+        "text": "t-shirt",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Show me ",
+        "userDefined": false
+      },
+      {
+        "text": "jackets",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Do you have ",
+        "userDefined": false
+      },
+      {
+        "text": "jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"I\u0027m looking for a ",
+        "userDefined": false
+      },
+      {
+        "text": "hat",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Do you sell ",
+        "userDefined": false
+      },
+      {
+        "text": "hoodies",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \n \"Do you have ",
+        "userDefined": false
+      },
+      {
+        "text": "t-shirts",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " under ",
+        "userDefined": false
+      },
+      {
+        "text": "500",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"Show me ",
+        "userDefined": false
+      },
+      {
+        "text": "jackets",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " below ",
+        "userDefined": false
+      },
+      {
+        "text": "3000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Any ",
+        "userDefined": false
+      },
+      {
+        "text": "jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " cheaper than ",
+        "userDefined": false
+      },
+      {
+        "text": "1000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"Find me a ",
+        "userDefined": false
+      },
+      {
+        "text": "hat",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " under ",
+        "userDefined": false
+      },
+      {
+        "text": "700",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"",
+        "userDefined": false
+      },
+      {
+        "text": "T-shirt",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " less than ",
+        "userDefined": false
+      },
+      {
+        "text": "400",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": " rupees\"\n \n \"What ",
+        "userDefined": false
+      },
+      {
+        "text": "t-shirts",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " do you have?\"\n \"Can I see your collection of ",
+        "userDefined": false
+      },
+      {
+        "text": "jackets",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"List all available ",
+        "userDefined": false
+      },
+      {
+        "text": "jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Suggest me a cheap ",
+        "userDefined": false
+      },
+      {
+        "text": "hoodie",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Products below ",
+        "userDefined": false
+      },
+      {
+        "text": "1500",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \n \"Show me items under ",
+        "userDefined": false
+      },
+      {
+        "text": "1000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"I want something below ",
+        "userDefined": false
+      },
+      {
+        "text": "800",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"Any products cheaper than ",
+        "userDefined": false
+      },
+      {
+        "text": "2000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "?\"\n \"Products less than ",
+        "userDefined": false
+      },
+      {
+        "text": "500",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \n \"",
+        "userDefined": false
+      },
+      {
+        "text": "T-shirt",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " in size M\"\n \"",
+        "userDefined": false
+      },
+      {
+        "text": "Jacket",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " in size L under ",
+        "userDefined": false
+      },
+      {
+        "text": "3000",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": "\"\n \"",
+        "userDefined": false
+      },
+      {
+        "text": "Jeans",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " in size 34\"\n \"",
+        "userDefined": false
+      },
+      {
+        "text": "Hat",
+        "meta": "@product_category",
+        "alias": "category",
+        "userDefined": true
+      },
+      {
+        "text": " under ",
+        "userDefined": false
+      },
+      {
+        "text": "600",
+        "meta": "@sys.number",
+        "alias": "price",
+        "userDefined": true
+      },
+      {
+        "text": " in small size\"",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

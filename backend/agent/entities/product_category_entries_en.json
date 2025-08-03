@@ -1,0 +1,76 @@
+[
+  {
+    "value": "tshirt",
+    "synonyms": [
+      "tshirt",
+      "tee",
+      "tees",
+      "t-shirt",
+      "t-shirts"
+    ]
+  },
+  {
+    "value": "jacket",
+    "synonyms": [
+      "jacket",
+      "coat",
+      "coats"
+    ]
+  },
+  {
+    "value": "jeans",
+    "synonyms": [
+      "jeans",
+      "trousers",
+      "denim",
+      "pants"
+    ]
+  },
+  {
+    "value": "shirt",
+    "synonyms": [
+      "shirt",
+      "casual shirt",
+      "formal shirt"
+    ]
+  },
+  {
+    "value": "dress",
+    "synonyms": [
+      "dress",
+      "frock",
+      "midi"
+    ]
+  },
+  {
+    "value": "shoes",
+    "synonyms": [
+      "shoes",
+      "sneakers",
+      "footwear",
+      "boots"
+    ]
+  },
+  {
+    "value": "hat",
+    "synonyms": [
+      "hat",
+      "caps",
+      "beanie"
+    ]
+  },
+  {
+    "value": "male",
+    "synonyms": [
+      "male",
+      "men"
+    ]
+  },
+  {
+    "value": "female",
+    "synonyms": [
+      "female",
+      "women"
+    ]
+  }
+]

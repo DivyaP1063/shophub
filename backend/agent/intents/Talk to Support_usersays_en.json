@@ -1,0 +1,28 @@
+[
+  {
+    "id": "50f4cd55-dfb3-4588-871e-8fcfae3e686a",
+    "data": [
+      {
+        "text": "\"I want to talk to support\"\r \"Connect me to customer service\"\r \"Can I speak to a representative?\"\r \"I need help from support\"\r \"How do I contact support?\"\r \"Talk to a human\"\r \"Contact customer care\"\r \"Get me a support agent\"\r \"I need assistance from customer support\"\r \"Can you connect me with support?\"\r \"Help me talk to customer service\"\r \"I want to chat with support\"\r \"Is there a way to reach support?\"\r \"Can I talk to a live person?\"\r \"Put me in touch with customer care\"",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  },
+  {
+    "id": "250f22d6-92bd-47f1-9539-31fc4f7f56f6",
+    "data": [
+      {
+        "text": "“I want to talk to a person”  “Connect me to customer support”  “Customer service”",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "en",
+    "updated": 0
+  }
+]

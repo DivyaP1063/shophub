@@ -1,0 +1,64 @@
+{
+  "id": "cca6e255-7c5b-439e-afcc-7d8765168f93",
+  "name": "ProductQuery",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "2cccea56-5482-4c72-803f-32f65520c19d",
+          "name": "category",
+          "required": false,
+          "dataType": "@product_category",
+          "value": "$category",
+          "defaultValue": "",
+          "isList": true,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        },
+        {
+          "id": "a3fc62ff-2875-4bc9-8524-041f0ae4607c",
+          "name": "price",
+          "required": false,
+          "dataType": "@sys.number",
+          "value": "$price",
+          "defaultValue": "",
+          "isList": true,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "en",
+          "speech": [
+            "You can explore our full product catalog on our website to find what you’re looking for.\nLet me know if you want help with anything else!"
+          ],
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}
