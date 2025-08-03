@@ -47,7 +47,7 @@ const CartPage = () => {
     try {
       setProcessing(true);
       // 1️⃣ Create order via backend
-      const res = await fetch('http://localhost:5000/api/orders/user', {
+      const res = await fetch('https://shophub-backend-qebe.onrender.com/api/orders/user', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ const CartPage = () => {
         handler: async (resp: any) => {
           try {
             // 3️⃣ Verify payment
-            const verifyRes = await fetch('http://localhost:5000/api/orders/verify-payment', {
+            const verifyRes = await fetch('https://shophub-backend-qebe.onrender.com/api/orders/verify-payment', {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
