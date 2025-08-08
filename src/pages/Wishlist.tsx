@@ -141,22 +141,8 @@ const WishlistPage = () => {
                 <p className="text-lg font-bold text-primary mb-3">${product.price}</p>
                 
                 <div className="flex items-center justify-between mb-3">
-                  <Badge variant="outline">{product.category}</Badge>
                   <span className="text-xs text-gray-500">Stock: {product.stock}</span>
                 </div>
-
-                {product.size.length > 0 && (
-                  <div className="mb-3">
-                    <p className="text-xs text-gray-600 mb-1">Available sizes:</p>
-                    <div className="flex gap-1">
-                      {product.size.map((size) => (
-                        <span key={size} className="text-xs bg-gray-100 px-2 py-1 rounded">
-                          {size}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 <div className="flex gap-2">
                   <Link to={`/products/${product._id}`} className="flex-1">

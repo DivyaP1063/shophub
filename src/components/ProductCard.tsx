@@ -114,27 +114,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
                   <p className="text-gray-600 mb-3 line-clamp-2">{product.description}</p>
                   
                   <div className="flex items-center space-x-3 mb-3">
-                    <Badge variant="outline">{product.category}</Badge>
                     <span className="text-sm text-gray-500">Stock: {product.stock}</span>
                   </div>
 
-                  {product.size.length > 0 && (
-                    <div className="mb-3">
-                      <p className="text-sm text-gray-600 mb-1">Available sizes:</p>
-                      <div className="flex gap-1">
-                        {product.size.slice(0, 4).map((size) => (
-                          <Badge key={size} variant="secondary" className="text-xs">
-                            {size}
-                          </Badge>
-                        ))}
-                        {product.size.length > 4 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{product.size.length - 4} more
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
                 
                 <div className="text-right">
@@ -198,27 +180,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
         <p className="text-lg font-bold text-primary mb-3">${product.price}</p>
         
         <div className="flex items-center justify-between mb-3">
-          <Badge variant="outline">{product.category}</Badge>
           <span className="text-xs text-gray-500">Stock: {product.stock}</span>
         </div>
 
-        {product.size.length > 0 && (
-          <div className="mb-3">
-            <p className="text-xs text-gray-600 mb-1">Available sizes:</p>
-            <div className="flex gap-1 flex-wrap">
-              {product.size.slice(0, 3).map((size) => (
-                <Badge key={size} variant="secondary" className="text-xs">
-                  {size}
-                </Badge>
-              ))}
-              {product.size.length > 3 && (
-                <Badge variant="secondary" className="text-xs">
-                  +{product.size.length - 3}
-                </Badge>
-              )}
-            </div>
-          </div>
-        )}
 
         <div className="flex gap-2">
           <Link to={`/products/${product._id}`} className="flex-1">

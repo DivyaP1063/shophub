@@ -7,9 +7,7 @@ const productController = {
     try {
       const {
         search,
-        category,
         price,
-        size,
         sort,
         page = 1,
         limit = 20,
@@ -23,15 +21,6 @@ const productController = {
         query.$text = { $search: search };
       }
 
-      // Category filter
-      if (category && category !== 'all') {
-        query.category = category;
-      }
-
-      // Size filter
-      if (size && size !== 'all') {
-        query.size = { $in: [size] };
-      }
 
       // Price filter
       if (price && price !== 'all') {
@@ -111,14 +100,13 @@ const productController = {
   // Create product
   createProduct: async (req, res) => {
     try {
-      const { title, description, price, category, size, stock } = req.body;
+      const { title, description, price, stock } = req.body;
 
       if (!req.files || req.files.length === 0) {
         return res.status(400).json({ message: 'At least one image is required' });
       }
 
       const images = req.files.map(file => file.path);
-      const sizeArray = Array.isArray(size) ? size : [size];
 
       const product = new Product({
         seller: req.user._id,
@@ -126,8 +114,6 @@ const productController = {
         description,
         price: parseFloat(price),
         images,
-        category,
-        size: sizeArray,
         stock: parseInt(stock)
       });
 
@@ -137,7 +123,7 @@ const productController = {
       res.status(201).json(product);
     } catch (error) {
       console.error('Error creating product:', error);
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ message: 'Server error', error });
     }
   },
 
@@ -154,14 +140,12 @@ const productController = {
         return res.status(403).json({ message: 'Not authorized to update this product' });
       }
 
-      const { title, description, price, category, size, stock } = req.body;
+      const { title, description, price,  stock } = req.body;
       
       // Update fields
       if (title) product.title = title;
       if (description) product.description = description;
       if (price) product.price = parseFloat(price);
-      if (category) product.category = category;
-      if (size) product.size = Array.isArray(size) ? size : [size];
       if (stock !== undefined) product.stock = parseInt(stock);
 
       // Update images if new ones are uploaded

@@ -15,7 +15,6 @@ const ProductDetail = () => {
   const { user, token } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedSize, setSelectedSize] = useState<string>('');
 
   useEffect(() => {
     if (id) {
@@ -32,9 +31,6 @@ const ProductDetail = () => {
       
       if (response.ok) {
         setProduct(productData);
-        if (productData.size.length > 0) {
-          setSelectedSize(productData.size[0]);
-        }
       } else {
         toast({
           title: "Error",
@@ -65,18 +61,9 @@ const ProductDetail = () => {
       return;
     }
 
-    if (!selectedSize) {
-      toast({
-        title: "Error",
-        description: "Please select a size",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       const response = await api.cart.add(
-        { productId: id, size: selectedSize, quantity: 1 },
+        { productId: id, quantity: 1 },
         token
       );
 
@@ -205,9 +192,6 @@ const ProductDetail = () => {
         {/* Product Info */}
         <div className="space-y-6">
           <div>
-            <Badge variant="outline" className="mb-2">
-              {product.category}
-            </Badge>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {product.title}
             </h1>
@@ -223,21 +207,7 @@ const ProductDetail = () => {
             </div>
           )}
 
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Size</h3>
-            <div className="flex flex-wrap gap-2">
-              {product.size.map((size) => (
-                <Button
-                  key={size}
-                  variant={selectedSize === size ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </Button>
-              ))}
-            </div>
-          </div>
+
 
           <div>
             <h3 className="text-lg font-semibold mb-2">Availability</h3>

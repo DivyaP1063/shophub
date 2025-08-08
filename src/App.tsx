@@ -24,6 +24,7 @@ import SellerAnalytics from "./pages/seller/SellerAnalytics";
 import SellerProfile from "./pages/seller/SellerProfile";
 import BuyerOrders from "./pages/buyer/BuyerOrders";
 import BuyerProfile from "./pages/buyer/BuyerProfile";
+import Layout from "./pages/Layout";
 
 const queryClient = new QueryClient();
 
@@ -35,9 +36,9 @@ const App = () => (
         <Sonner />
         <AuthProvider>
           <BrowserRouter>
-            <Header />
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/products" element={<Products />} />
@@ -57,6 +58,8 @@ const App = () => (
               <Route path="/buyer/profile" element={<BuyerProfile />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
+              </Route>
+
             </Routes>
           </BrowserRouter>
         </AuthProvider>

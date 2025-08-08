@@ -69,7 +69,6 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ products, onRefre
             <TableHeader>
               <TableRow>
                 <TableHead>Product</TableHead>
-                <TableHead>Category</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Stock</TableHead>
                 <TableHead>Status</TableHead>
@@ -88,14 +87,10 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ products, onRefre
                       />
                       <div>
                         <p className="font-medium">{product.title}</p>
-                        <p className="text-sm text-gray-500">
-                          Sizes: {product.size.join(', ')}
-                        </p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline">{product.category}</Badge>
                   </TableCell>
                   <TableCell>${product.price}</TableCell>
                   <TableCell>

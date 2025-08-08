@@ -39,7 +39,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     <>
       {/* Toggle Button */}
       <button
-        className="fixed top-4 left-4  text-gray-800 bg-white p-2 z-10"
+        className="absolute top-4 left-4  text-gray-800 bg-white p-2 z-10"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

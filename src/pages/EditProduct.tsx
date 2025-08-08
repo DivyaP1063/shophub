@@ -26,16 +26,13 @@ const EditProduct = () => {
     title: '',
     description: '',
     price: '',
-    category: '',
     stock: '',
-    size: [] as string[],
+
   });
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
 
-  const categories = ['Dresses', 'Tops', 'Pants', 'Skirts', 'Outerwear', 'Shoes', 'Accessories'];
-  const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
   useEffect(() => {
     if (id && token) {
@@ -55,10 +52,8 @@ const EditProduct = () => {
         setFormData({
           title: productData.title,
           description: productData.description || '',
-          price: productData.price.toString(),
-          category: productData.category,
+          price: productData.price.toString(),  
           stock: productData.stock.toString(),
-          size: productData.size,
         });
       } else {
         toast({
@@ -84,14 +79,7 @@ const EditProduct = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSizeChange = (size: string, checked: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      size: checked 
-        ? [...prev.size, size]
-        : prev.size.filter(s => s !== size)
-    }));
-  };
+
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -111,15 +99,6 @@ const EditProduct = () => {
       return;
     }
 
-    if (formData.size.length === 0) {
-      toast({
-        title: "Error",
-        description: "Please select at least one size",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setLoading(true);
     
     try {
@@ -127,12 +106,8 @@ const EditProduct = () => {
       productFormData.append('title', formData.title);
       productFormData.append('description', formData.description);
       productFormData.append('price', formData.price);
-      productFormData.append('category', formData.category);
       productFormData.append('stock', formData.stock);
       
-      formData.size.forEach(size => {
-        productFormData.append('size', size);
-      });
       
       if (images.length > 0) {
         images.forEach(image => {
@@ -251,21 +226,6 @@ const EditProduct = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map(category => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="stock">Stock Quantity</Label>
@@ -278,22 +238,6 @@ const EditProduct = () => {
                   placeholder="0"
                   required
                 />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Available Sizes</Label>
-              <div className="flex flex-wrap gap-4">
-                {sizes.map(size => (
-                  <div key={size} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={size}
-                      checked={formData.size.includes(size)}
-                      onCheckedChange={(checked) => handleSizeChange(size, checked as boolean)}
-                    />
-                    <Label htmlFor={size}>{size}</Label>
-                  </div>
-                ))}
               </div>
             </div>
 

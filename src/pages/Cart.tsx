@@ -234,14 +234,7 @@ const CartPage = () => {
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg">{item.product.title}</h3>
                       <p className="text-gray-600">{item.product.description}</p>
-                      <div className="flex items-center space-x-2 mt-2">
-                        <Badge variant="outline">{item.product.category}</Badge>
-                        {item.product.size.length > 0 && (
-                          <Badge variant="secondary">
-                            {item.product.size.join(', ')}
-                          </Badge>
-                        )}
-                      </div>
+   
                     </div>
                     <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">

@@ -13,9 +13,7 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
   const [priceFilter, setPriceFilter] = useState('all');
-  const [sizeFilter, setSizeFilter] = useState('all');
   const [sortBy, setSortBy] = useState('latest');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -24,9 +22,7 @@ const Products = () => {
     try {
       const params = new URLSearchParams();
       if (searchTerm) params.append('search', searchTerm);
-      if (categoryFilter && categoryFilter !== 'all') params.append('category', categoryFilter);
       if (priceFilter && priceFilter !== 'all') params.append('price', priceFilter);
-      if (sizeFilter && sizeFilter !== 'all') params.append('size', sizeFilter);
       if (sortBy && sortBy !== 'latest') params.append('sort', sortBy);
 
       const response = await api.products.getAll(params.toString());
@@ -44,34 +40,21 @@ const Products = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [searchTerm, categoryFilter, priceFilter, sizeFilter, sortBy]);
+  }, [searchTerm,priceFilter, sortBy]);
 
   const clearFilters = () => {
     setSearchTerm('');
-    setCategoryFilter('all');
     setPriceFilter('all');
-    setSizeFilter('all');
     setSortBy('latest');
   };
 
-  const fashionCategories = [
-    'All Categories',
-    'Dresses',
-    'Tops & Shirts',
-    'Pants & Jeans',
-    'Skirts',
-    'Outerwear',
-    'Shoes',
-    'Accessories',
-    'Bags',
-    'Jewelry'
-  ];
+
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Fashion Collection</h1>
-        <p className="text-gray-600">Discover the latest trends and timeless classics</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">SafeGuard Devices</h1>
+        <p className="text-gray-600">Discover the latest devices</p>
         
         {/* Search and Filters */}
         <div className="bg-white p-6 rounded-lg shadow-sm border mt-6">
@@ -88,21 +71,6 @@ const Products = () => {
               </div>
             </div>
             
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="Dresses">Dresses</SelectItem>
-                <SelectItem value="Tops">Tops & Shirts</SelectItem>
-                <SelectItem value="Pants">Pants & Jeans</SelectItem>
-                <SelectItem value="Skirts">Skirts</SelectItem>
-                <SelectItem value="Outerwear">Outerwear</SelectItem>
-                <SelectItem value="Shoes">Shoes</SelectItem>
-                <SelectItem value="Accessories">Accessories</SelectItem>
-              </SelectContent>
-            </Select>
             
             <Select value={priceFilter} onValueChange={setPriceFilter}>
               <SelectTrigger>
@@ -118,20 +86,6 @@ const Products = () => {
               </SelectContent>
             </Select>
             
-            <Select value={sizeFilter} onValueChange={setSizeFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Size" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Sizes</SelectItem>
-                <SelectItem value="XS">XS</SelectItem>
-                <SelectItem value="S">S</SelectItem>
-                <SelectItem value="M">M</SelectItem>
-                <SelectItem value="L">L</SelectItem>
-                <SelectItem value="XL">XL</SelectItem>
-                <SelectItem value="XXL">XXL</SelectItem>
-              </SelectContent>
-            </Select>
             
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger>
@@ -153,9 +107,9 @@ const Products = () => {
                 <Filter className="h-4 w-4 mr-2" />
                 Clear Filters
               </Button>
-              {(categoryFilter !== 'all' || priceFilter !== 'all' || sizeFilter !== 'all') && (
+              {(priceFilter !== 'all') && (
                 <Badge variant="secondary">
-                  {[categoryFilter, priceFilter, sizeFilter].filter(f => f !== 'all').length} filters applied
+                  {[priceFilter].filter(f => f !== 'all').length} filters applied
                 </Badge>
               )}
             </div>
