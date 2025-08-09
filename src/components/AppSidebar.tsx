@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Package, User, BarChart3, DollarSign, ShoppingBag, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Sidebar,
   SidebarContent,
@@ -35,6 +36,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const items = userRole === 'seller' ? sellerItems : buyerItems;
 
+  const { user} = useAuth();
+
   return (
     <>
       {/* Toggle Button */}
@@ -56,11 +59,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">
-                  {userRole === 'seller' ? 'S' : 'B'}
+                  {user.name[0]}
                 </span>
               </div>
               <h2 className="text-lg font-semibold capitalize">
-                {userRole} Dashboard
+                {user.name} Dashboard
               </h2>
             </div>
           </SidebarHeader>

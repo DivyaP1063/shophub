@@ -1,9 +1,9 @@
-
 export interface User {
   _id: string;
   name: string;
   email: string;
   role: 'buyer' | 'seller';
+  address: string | null; // <-- Add this line for address
   createdAt: string;
   updatedAt: string;
 }

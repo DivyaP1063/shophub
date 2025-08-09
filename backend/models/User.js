@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema(
       enum: ["buyer", "seller"],
       default: "buyer",
     },
+    address: {
+      type: String,
+      default: null,
+      trim: true,
+    },
     orders: [
       {
         // Orders placed by the buyer

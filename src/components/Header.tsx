@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { ShoppingCart, User, Heart } from 'lucide-react';
+import Logo from "../assets/HdarkLogo.png";
 
 const Header = () => {
   const { user, token, logout } = useAuth();
@@ -17,22 +18,18 @@ const Header = () => {
     <header className="bg-white shadow-sm border-b  w-full ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center pl-10">
+          <div className="flex items-center ">
             <Link to="/" className="text-2xl font-bold text-primary">
-              ShopHub
+              <img src={Logo}/>
+              
             </Link>
           </div>
 
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 items-center">
             <Link to="/products" className="text-gray-700 hover:text-primary">
               Products
             </Link>
 
-            {token && user?.role && (
-              <Link to={`/${user.role}/profile`} className="text-gray-700 hover:text-primary">
-                Dashboard
-              </Link>
-            )}
           </nav>
 
           <div className="flex items-center space-x-4">
@@ -54,7 +51,7 @@ const Header = () => {
                 )}
 
                 <div className="flex items-center space-x-2">
-                  {user.role && (
+                  {token && user.role && (
                     <Link to={`/${user.role}/profile`}>
                       <Button variant="ghost" size="icon">
                         <User className="h-5 w-5" />

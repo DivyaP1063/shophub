@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -11,16 +10,61 @@ import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 
+// Address Modal Component
+const AddressModal = ({
+  open,
+  address,
+  setAddress,
+  onClose,
+  onSubmit,
+  loading,
+}: {
+  open: boolean;
+  address: string;
+  setAddress: (val: string) => void;
+  onClose: () => void;
+  onSubmit: () => void;
+  loading: boolean;
+}) => {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Enter Delivery Address</h2>
+        <textarea
+          className="w-full border rounded p-2 mb-4"
+          rows={4}
+          value={address}
+          onChange={e => setAddress(e.target.value)}
+          placeholder="Enter your address"
+        />
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onClose} disabled={loading}>
+            Cancel
+          </Button>
+          <Button onClick={onSubmit} disabled={loading || !address.trim()}>
+            {loading ? "Saving..." : "Save & Continue"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CartPage = () => {
   const { user, token } = useAuth();
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [address, setAddress] = useState(user?.address || '');
+  const [savingAddress, setSavingAddress] = useState(false);
   const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY;
 
   useEffect(() => {
     if (user && token) {
       fetchCart();
+      setAddress(user.address || '');
     }
   }, [user, token]);
 
@@ -32,6 +76,33 @@ const CartPage = () => {
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
+
+  // Show address modal before payment
+  const handleProceedToCheckout = () => {
+    setShowAddressModal(true);
+  };
+
+  // Save address, then call payment
+  const handleAddressSubmit = async () => {
+    if (!address.trim() || !user || !token) return;
+    setSavingAddress(true);
+    try {
+      // Update address in backend
+      const res = await fetch('https://shophub-backend-qebe.onrender.com/api/user/address', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user._id, address }),
+      });
+      if (!res.ok) throw new Error('Failed to update address');
+      setShowAddressModal(false);
+      toast({ title: "Address Saved", description: "Proceeding to payment." });
+      handlePayment();
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message || "Failed to save address", variant: "destructive" });
+    } finally {
+      setSavingAddress(false);
+    }
+  };
 
   const handlePayment = async () => {
     if (!token) {
@@ -213,6 +284,14 @@ const CartPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <AddressModal
+        open={showAddressModal}
+        address={address}
+        setAddress={setAddress}
+        onClose={() => setShowAddressModal(false)}
+        onSubmit={handleAddressSubmit}
+        loading={savingAddress}
+      />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Shopping Cart</h1>
         <p className="text-gray-600">Review your items and proceed to checkout</p>
@@ -304,7 +383,11 @@ const CartPage = () => {
                     <span>${(calculateTotal() + 9.99 + calculateTotal() * 0.08).toFixed(2)}</span>
                   </div>
                 </div>
-                <Button className='w-full' onClick={handlePayment} disabled={!cart?.items.length || processing}>
+                <Button
+                  className='w-full'
+                  onClick={handleProceedToCheckout}
+                  disabled={!cart?.items.length || processing}
+                >
                   {processing ? "Processing..." : "Proceed to Checkout"}
                 </Button>
 

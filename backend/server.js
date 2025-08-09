@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -16,6 +15,8 @@ const cartRoutes = require('./routes/cart');
 const wishlistRoutes = require('./routes/wishlist');
 const orderRoutes = require('./routes/orders');
 
+// Import User model for address update
+const User = require('./models/User');
 
 const app = express();
 app.use(express.json());
@@ -47,6 +48,27 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/orders', orderRoutes);
+
+// Route to update user address
+app.put('/api/user/address', async (req, res) => {
+  try {
+    const { userId, address } = req.body;
+    if (!userId || typeof address !== 'string') {
+      return res.status(400).json({ message: 'userId and address are required.' });
+    }
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { address },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    res.json({ message: 'Address updated successfully.', address: user.address });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update address.', error: error.message });
+  }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

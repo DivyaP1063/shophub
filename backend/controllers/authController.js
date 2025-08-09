@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
@@ -32,6 +31,7 @@ const authController = {
           name: user.name,
           email: user.email,
           role: user.role,
+          address: user.address, // Include address
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
         }
@@ -73,6 +73,7 @@ const authController = {
           name: user.name,
           email: user.email,
           role: user.role,
+          address: user.address, // Include address
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
         }

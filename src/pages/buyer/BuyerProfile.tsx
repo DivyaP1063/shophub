@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Button } from '@/components/ui/button';
@@ -12,17 +11,17 @@ import { Camera, Mail, Phone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const BuyerProfile = () => {
-  const { user,token } = useAuth();
+  const { user, token } = useAuth();
+  console.log('User data:', user);  
   const [profile, setProfile] = useState({
     Fullname: user.name,
     email: user.email,
     phone: '+91 (555) 123-4567',
-
-  })
+    address: user.address || '', // Use user.address if available
+  });
 
   const handleSave = () => {
     console.log('Saving profile:', profile);
-
   };
 
   return (
@@ -52,7 +51,6 @@ const BuyerProfile = () => {
               </div>
               <Separator />
               <div className="space-y-2">
- 
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-muted-foreground" />
                   <span className="text-sm">{profile.email}</span>
@@ -80,7 +78,7 @@ const BuyerProfile = () => {
                   <Input
                     id="name"
                     value={profile.Fullname}
-                    onChange={(e) => setProfile({...profile, Fullname: e.target.value})}
+                    onChange={(e) => setProfile({ ...profile, Fullname: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -89,7 +87,7 @@ const BuyerProfile = () => {
                     id="email"
                     type="email"
                     value={profile.email}
-                    onChange={(e) => setProfile({...profile, email: e.target.value})}
+                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -97,16 +95,23 @@ const BuyerProfile = () => {
                   <Input
                     id="phone"
                     value={profile.phone}
-                    onChange={(e) => setProfile({...profile, phone: e.target.value})}
+                    onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                   />
                 </div>
-
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="address">Address</Label>
+                  <textarea
+                    id="address"
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    rows={3}
+                    value={profile.address}
+                    onChange={(e) => setProfile({ ...profile, address: e.target.value })}
+                    placeholder={user.address ? user.address : "Add address"}
+                  />
+                </div>
               </div>
-   
             </CardContent>
           </Card>
-
-
         </div>
       </div>
     </DashboardLayout>

@@ -75,6 +75,10 @@ const Login = () => {
               <Link to="/register" className="font-medium text-primary hover:underline">
                 Sign up
               </Link>
+              {' '}Or An Admin?{' '}
+              <Link to="/Admin" className="font-medium text-primary hover:underline">
+                Admin
+              </Link>
             </p>
           </div>
         </CardContent>

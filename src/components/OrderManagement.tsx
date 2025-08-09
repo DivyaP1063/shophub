@@ -68,6 +68,7 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
     const getOrders = async () => {
       try {
         const data = await fetchOrders(userRole, token);
+        console.log(data);
         setOrders(data);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
@@ -92,7 +93,7 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
             <TableHeader>
               <TableRow>
                 <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
+                <TableHead>Product</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Date</TableHead>
               </TableRow>
@@ -107,7 +108,7 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
                   ):(
                   <TableCell>  {order.items.map((item, index) => (
                     <span key={index}>
-                      {item.product?.seller?.name || "Unknown"}
+                      {item.product?.title || "Unknown"}
                       {index < order.items.length - 1 && ", "}
                     </span>
                   ))}</TableCell>

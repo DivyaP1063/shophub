@@ -25,6 +25,8 @@ import SellerProfile from "./pages/seller/SellerProfile";
 import BuyerOrders from "./pages/buyer/BuyerOrders";
 import BuyerProfile from "./pages/buyer/BuyerProfile";
 import Layout from "./pages/Layout";
+import Admin from "./pages/Admin";
+import AdminRegister from "./pages/AdminRegister";
 
 const queryClient = new QueryClient();
 
@@ -40,7 +42,9 @@ const App = () => (
               <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/Admin" element={<Admin />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/Adminregister" element={<AdminRegister/>} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<CartPage />} />

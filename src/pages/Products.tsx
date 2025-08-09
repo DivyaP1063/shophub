@@ -144,9 +144,7 @@ const Products = () => {
         </div>
       ) : products.length > 0 ? (
         <>
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-gray-600">{products.length} items found</p>
-          </div>
+
           <div className={viewMode === 'grid' 
             ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             : "space-y-4"
