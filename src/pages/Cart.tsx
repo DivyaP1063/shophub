@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchCart, updateCartItem, removeCartItem } from '@/store/cartSlice';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -52,21 +54,20 @@ const AddressModal = ({
 };
 
 const CartPage = () => {
+  const dispatch = useAppDispatch();
+  const { cart, loading } = useAppSelector(state => state.cart);
   const { user, token } = useAuth();
-  const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [address, setAddress] = useState(user?.address || '');
   const [savingAddress, setSavingAddress] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY;
 
   useEffect(() => {
-    if (user && token) {
-      fetchCart();
-      setAddress(user.address || '');
+    if (token) {
+      dispatch(fetchCart(token));
     }
-  }, [user, token]);
+  }, [dispatch, token]);
 
   const loadRzp = () =>
     new Promise<boolean>((resolve) => {
@@ -116,7 +117,6 @@ const CartPage = () => {
     }
 
     try {
-      setProcessing(true);
       // 1️⃣ Create order via backend
       const res = await fetch('https://shophub-backend-qebe.onrender.com/api/orders/user', {
         method: "POST",
@@ -164,70 +164,9 @@ const CartPage = () => {
       new (window as any).Razorpay(options).open();
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Something went wrong", variant: "destructive" });
-    } finally {
-      setProcessing(false);
     }
   };
   
-
-  const fetchCart = async () => {
-    if (!token) return;
-    
-    setLoading(true);
-    try {
-      const response = await api.cart.get(token);
-      if (response.ok) {
-        const data = await response.json();
-        setCart(data);
-      }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateQuantity = async (productId: string, quantity: number) => {
-    if (!token) return;
-
-    try {
-      const response = await api.cart.update({ product: productId, quantity }, token);
-      if (response.ok) {
-        fetchCart();
-        toast({
-          title: "Success",
-          description: "Cart updated successfully!",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update cart",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const removeItem = async (productId: string) => {
-    if (!token) return;
-
-    try {
-      const response = await api.cart.remove(productId, token);
-      if (response.ok) {
-        fetchCart();
-        toast({
-          title: "Success",
-          description: "Item removed from cart!",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to remove item",
-        variant: "destructive",
-      });
-    }
-  };
 
   const clearCart = async () => {
     if (!token) return;
@@ -235,7 +174,7 @@ const CartPage = () => {
     try {
       const response = await api.cart.clear(token);
       if (response.ok) {
-        fetchCart();
+        dispatch(fetchCart(token));
         toast({
           title: "Success",
           description: "Cart cleared successfully!",
@@ -255,6 +194,16 @@ const CartPage = () => {
     return cart.items.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   };
 
+  const updateQuantity = async (productId: string, quantity: number) => {
+    if (!token) return;
+    dispatch(updateCartItem({ productId, quantity, token }));
+  };
+
+  const removeItem = async (productId: string) => {
+    if (!token) return;
+    dispatch(removeCartItem({ productId, token }));
+  };
+
   if (!user) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -270,7 +219,8 @@ const CartPage = () => {
     );
   }
 
-  if (loading) {
+  if (loading || cart === null || !cart.items) {
+    // Show loading skeleton
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-4">
@@ -278,6 +228,20 @@ const CartPage = () => {
           <div className="h-32 bg-gray-200 rounded"></div>
           <div className="h-32 bg-gray-200 rounded"></div>
         </div>
+      </div>
+    );
+  }
+
+  if (cart.items.length === 0) {
+    // Show empty cart message
+    return (
+      <div className="text-center py-16">
+        <ShoppingBag className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
+        <p className="text-gray-600 mb-6">Start shopping to add items to your cart</p>
+        <Link to="/products">
+          <Button>Continue Shopping</Button>
+        </Link>
       </div>
     );
   }

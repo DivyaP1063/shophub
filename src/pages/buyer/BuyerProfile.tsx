@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,15 +12,31 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const BuyerProfile = () => {
   const { user, token } = useAuth();
-  console.log('User data:', user);  
+
+  // Guard: Wait for user to load
+  if (!user) {
+    return <div className="flex justify-center items-center h-64">Loading...</div>;
+  }
+
   const [profile, setProfile] = useState({
-    Fullname: user.name,
-    email: user.email,
+    Fullname: user.name || "",
+    email: user.email || "",
     phone: '+91 (555) 123-4567',
-    address: user.address || '', // Use user.address if available
+    address: user.address || '',
   });
 
+  // Update profile state if user changes (e.g. after login or reload)
+  useEffect(() => {
+    setProfile({
+      Fullname: user.name || "",
+      email: user.email || "",
+      phone: '+91 (555) 123-4567',
+      address: user.address || '',
+    });
+  }, [user]);
+
   const handleSave = () => {
+    // Implement save logic here (e.g. API call)
     console.log('Saving profile:', profile);
   };
 
@@ -42,7 +58,9 @@ const BuyerProfile = () => {
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="w-24 h-24">
                   <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="text-lg">JS</AvatarFallback>
+                  <AvatarFallback className="text-lg">
+                    {profile.Fullname ? profile.Fullname[0] : "U"}
+                  </AvatarFallback>
                 </Avatar>
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
                   <Camera className="w-4 h-4" />
@@ -110,6 +128,9 @@ const BuyerProfile = () => {
                   />
                 </div>
               </div>
+              <Button className="mt-4" onClick={handleSave}>
+                Save Changes
+              </Button>
             </CardContent>
           </Card>
         </div>

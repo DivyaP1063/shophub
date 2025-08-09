@@ -1,54 +1,59 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import ProductCard from '@/components/ProductCard';
-import { Product } from '@/types';
-import { api } from '@/lib/api';
 import { Search, Filter, Grid, List } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchProducts } from '@/store/productsSlice';
 
 const Products = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { products, loading } = useAppSelector(state => state.products);
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('all');
   const [sortBy, setSortBy] = useState('latest');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (searchTerm) params.append('search', searchTerm);
-      if (priceFilter && priceFilter !== 'all') params.append('price', priceFilter);
-      if (sortBy && sortBy !== 'latest') params.append('sort', sortBy);
-
-      const response = await api.products.getAll(params.toString());
-      const data = await response.json();
-      
-      if (response.ok) {
-        setProducts(data.products || data);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchProducts();
-  }, [searchTerm,priceFilter, sortBy]);
+    if (products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products.length]);
+
+  // Filtering and sorting in-memory
+  const filteredProducts = useMemo(() => {
+    let filtered = [...products];
+    if (searchTerm) {
+      filtered = filtered.filter(p =>
+        p.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    // Price filter
+    if (priceFilter !== 'all') {
+      filtered = filtered.filter(p => {
+        const price = p.price;
+        if (priceFilter === '0-50') return price < 50;
+        if (priceFilter === '50-100') return price >= 50 && price < 100;
+        if (priceFilter === '100-200') return price >= 100 && price < 200;
+        if (priceFilter === '200-500') return price >= 200 && price < 500;
+        if (priceFilter === '500+') return price >= 500;
+        return true;
+      });
+    }
+    // Sorting
+    if (sortBy === 'price-low') filtered.sort((a, b) => a.price - b.price);
+    if (sortBy === 'price-high') filtered.sort((a, b) => b.price - a.price);
+    // Add more sort logic as needed
+    return filtered;
+  }, [products, searchTerm, priceFilter, sortBy]);
 
   const clearFilters = () => {
     setSearchTerm('');
     setPriceFilter('all');
     setSortBy('latest');
   };
-
-
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -142,18 +147,15 @@ const Products = () => {
             <div key={i} className="bg-gray-200 animate-pulse rounded-lg h-80"></div>
           ))}
         </div>
-      ) : products.length > 0 ? (
-        <>
-
-          <div className={viewMode === 'grid' 
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            : "space-y-4"
-          }>
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} viewMode={viewMode} />
-            ))}
-          </div>
-        </>
+      ) : filteredProducts.length > 0 ? (
+        <div className={viewMode === 'grid' 
+          ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          : "space-y-4"
+        }>
+          {filteredProducts.map((product) => (
+            <ProductCard key={product._id} product={product} viewMode={viewMode} />
+          ))}
+        </div>
       ) : (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">👗</div>

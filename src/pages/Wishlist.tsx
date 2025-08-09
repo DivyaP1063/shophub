@@ -1,67 +1,48 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchWishlist, removeWishlistItem } from '@/store/wishlistSlice';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Wishlist, Product } from '@/types';
+import { Product } from '@/types';
 import { api } from '@/lib/api';
 import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 
 const WishlistPage = () => {
+  const dispatch = useAppDispatch();
+  const { wishlist, loading } = useAppSelector(state => state.wishlist);
   const { user, token } = useAuth();
-  const [wishlist, setWishlist] = useState<Wishlist | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user && token) {
-      fetchWishlist();
+    if (token) {
+      dispatch(fetchWishlist(token));
     }
-  }, [user, token]);
+  }, [dispatch, token]);
 
-  const fetchWishlist = async () => {
+  const removeFromWishlist = (productId: string) => {
     if (!token) return;
-    
-    setLoading(true);
-    try {
-      const response = await api.wishlist.get(token);
-      if (response.ok) {
-        const data = await response.json();
-        setWishlist(data);
-      }
-    } catch (error) {
-      console.error('Error fetching wishlist:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const removeFromWishlist = async (productId: string) => {
-    if (!token) return;
-
-    try {
-      const response = await api.wishlist.remove(productId, token);
-      if (response.ok) {
-        fetchWishlist();
+    dispatch(removeWishlistItem({ productId, token }))
+      .unwrap()
+      .then(() => {
         toast({
           title: "Success",
           description: "Item removed from wishlist!",
         });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to remove item from wishlist",
-        variant: "destructive",
+      })
+      .catch(() => {
+        toast({
+          title: "Error",
+          description: "Failed to remove item from wishlist",
+          variant: "destructive",
+        });
       });
-    }
   };
 
   const addToCart = async (product: Product) => {
     if (!token) return;
-
     try {
       const response = await api.cart.add({ product: product._id, quantity: 1 }, token);
       if (response.ok) {
@@ -94,7 +75,7 @@ const WishlistPage = () => {
     );
   }
 
-  if (loading) {
+  if (loading || !wishlist) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-4">
@@ -116,7 +97,7 @@ const WishlistPage = () => {
         <p className="text-gray-600">Save your favorite items for later</p>
       </div>
 
-      {wishlist?.products && wishlist.products.length > 0 ? (
+      {wishlist.products && wishlist.products.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {wishlist.products.map((product: Product) => (
             <Card key={product._id} className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -139,18 +120,15 @@ const WishlistPage = () => {
                 <h3 className="font-semibold text-lg mb-1 line-clamp-2">{product.title}</h3>
                 <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
                 <p className="text-lg font-bold text-primary mb-3">${product.price}</p>
-                
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs text-gray-500">Stock: {product.stock}</span>
                 </div>
-
                 <div className="flex gap-2">
                   <Link to={`/products/${product._id}`} className="flex-1">
                     <Button variant="outline" className="w-full" size="sm">
                       View Details
                     </Button>
                   </Link>
-                  
                   <Button 
                     onClick={() => addToCart(product)} 
                     size="sm" 
