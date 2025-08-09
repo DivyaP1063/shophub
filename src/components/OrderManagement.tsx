@@ -27,7 +27,7 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
 
   const fetchOrders = async (userRole: string, token: string): Promise<Order[]> => {
     try {
-      const endpoint = userRole === "seller" ? "https://shophub-lilac-six.vercel.app/api/orders/seller" : "https://shophub-lilac-six.vercel.app/api/orders/user";
+      const endpoint = userRole === "seller" ? "https://shophub-backend-qebe.onrender.com/api/orders/seller" : "https://shophub-backend-qebe.onrender.com/api/orders/user";
   
       const response = await fetch(endpoint, {
         method: "GET",

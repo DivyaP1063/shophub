@@ -1,5 +1,5 @@
 
-const API_BASE_URL = 'https://shophub-lilac-six.vercel.app/api';
+const API_BASE_URL = 'https://shophub-backend-qebe.onrender.com/api';
 
 export const api = {
   // Auth endpoints
