@@ -89,7 +89,7 @@ const CartPage = () => {
     setSavingAddress(true);
     try {
       // Update address in backend
-      const res = await fetch('https://shophub-backend-qebe.onrender.com/api/user/address', {
+      const res = await fetch('https://shophub-lilac-six.vercel.app/api/user/address', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user._id, address }),
@@ -118,7 +118,7 @@ const CartPage = () => {
 
     try {
       // 1️⃣ Create order via backend
-      const res = await fetch('https://shophub-backend-qebe.onrender.com/api/orders/user', {
+      const res = await fetch('https://shophub-lilac-six.vercel.app/api/orders/user', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,7 +139,7 @@ const CartPage = () => {
         handler: async (resp: any) => {
           try {
             // 3️⃣ Verify payment
-            const verifyRes = await fetch('https://shophub-backend-qebe.onrender.com/api/orders/verify-payment', {
+            const verifyRes = await fetch('https://shophub-lilac-six.vercel.app/api/orders/verify-payment', {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
