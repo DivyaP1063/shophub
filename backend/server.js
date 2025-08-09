@@ -27,7 +27,7 @@ app.use(cors(
   {
     origin:["https://safeguardecommerce.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+
   }
 ));
 app.use(express.json());
