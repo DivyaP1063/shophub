@@ -1,10 +1,8 @@
-
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const crypto = require("crypto");
 const razorpay = require("../config/razorpay"); 
-
 
 const orderController = {
   // Create order from cart
@@ -88,29 +86,29 @@ const orderController = {
   },
 
   // Get user's orders
-getUserOrders: async (req, res) => {
-  try {
-    const orders = await Order.find({ user: req.user._id })
-      .populate({
-        path: "items.product",
-        select: "title price", // get only title & price from Product
-        populate: {
-          path: "user", // if Product has a seller/user field
-          select: "name email", // get seller info
-        },
-      })
-      .populate({
-        path: "sellers", // matches your schema (array of User)
-        select: "name email",
-      })
-      .sort({ createdAt: -1 });
+  getUserOrders: async (req, res) => {
+    try {
+      const orders = await Order.find({ user: req.user._id })
+        .populate({
+          path: "items.product",
+          select: "title price",
+          populate: {
+            path: "seller", // FIXED: use 'seller' not 'user'
+            select: "name email",
+          },
+        })
+        .populate({
+          path: "user",
+          select: "name email",
+        })
+        .sort({ createdAt: -1 });
 
-    res.json(orders);
-  } catch (error) {
-    console.error("Error fetching user orders:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-},
+      res.json(orders);
+    } catch (error) {
+      console.error("Error fetching user orders:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
 
   // Get seller's orders
   getSellerOrders: async (req, res) => {
