@@ -59,7 +59,7 @@ const Header = () => {
                     </Link>
                   )}
                   <span className="text-sm text-gray-700 max-md:hidden">
-                    {user.name}
+                    {`${user.name.substring(0,8)}...`}
                   </span>
                   <Button variant="outline" size="sm" onClick={handleLogout}>
                     Logout

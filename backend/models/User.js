@@ -1,6 +1,18 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
+const addressSchema = new mongoose.Schema(
+  {
+    houseNo: { type: String, trim: true },
+    landmark: { type: String, trim: true },
+    area: { type: String, trim: true },
+    district: { type: String, trim: true },
+    state: { type: String, trim: true },
+    pincode: { type: String, trim: true },
+  },
+  { _id: false } // Prevent creating separate _id for address
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -26,9 +38,8 @@ const userSchema = new mongoose.Schema(
       default: "buyer",
     },
     address: {
-      type: String,
+      type: addressSchema,
       default: null,
-      trim: true,
     },
     orders: [
       {

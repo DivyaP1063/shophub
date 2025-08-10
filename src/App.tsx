@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { store } from '@/store';
 import { AuthProvider } from "@/contexts/AuthContext";
-import Header from "@/components/Header";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";

@@ -3,10 +3,18 @@ export interface User {
   name: string;
   email: string;
   role: 'buyer' | 'seller';
-  address: string | null; // <-- Add this line for address
+  address: {
+    houseNo: string;
+    landmark: string;
+    area: string;
+    district: string;
+    state: string;
+    pincode: string;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface Product {
   _id: string;
@@ -62,6 +70,7 @@ export interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: string) => Promise<void>;
+  updateUser: (updatedUser: Partial<User>) => void;
   logout: () => void;
   loading: boolean;
 }

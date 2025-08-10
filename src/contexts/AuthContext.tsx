@@ -98,6 +98,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  // 🔹 New function to update user state + localStorage
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+
   const value: AuthContextType = {
     user,
     token,
@@ -105,6 +111,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     register,
     logout,
     loading,
+    updateUser, // expose it here
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
