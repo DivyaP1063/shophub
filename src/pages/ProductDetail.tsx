@@ -55,65 +55,64 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
-    if (!token) {
+    if (!user || !token) {
       setShowAuthModal(true);
       return;
     }
-
+    if (user.role !== 'buyer') {
+      toast({
+        title: "Error",
+        description: "Only buyers can add items to cart",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
-      const response = await api.cart.add(
-        { productId: id, quantity: 1 },
-        token
-      );
-
+      const response = await api.cart.add({ product: product._id, quantity: 1 }, token);
       if (response.ok) {
         toast({
           title: "Success",
-          description: "Product added to cart",
+          description: "Product added to cart!",
         });
       } else {
-        const errorData = await response.json();
-        toast({
-          title: "Error",
-          description: errorData.message || "Failed to add to cart",
-          variant: "destructive",
-        });
+        throw new Error('Failed to add to cart');
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add to cart",
+        description: "Failed to add product to cart",
         variant: "destructive",
       });
     }
   };
 
   const handleAddToWishlist = async () => {
-    if (!token) {
+    if (!user || !token) {
       setShowAuthModal(true);
       return;
     }
-
+    if (user.role !== 'buyer') {
+      toast({
+        title: "Error",
+        description: "Only buyers can add items to wishlist",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
-      const response = await api.wishlist.add({ productId: id }, token);
-
+      const response = await api.wishlist.add({ product: product._id }, token);
       if (response.ok) {
         toast({
           title: "Success",
-          description: "Product added to wishlist",
+          description: "Product added to wishlist!",
         });
       } else {
-        const errorData = await response.json();
-        toast({
-          title: "Error",
-          description: errorData.message || "Failed to add to wishlist",
-          variant: "destructive",
-        });
+        throw new Error('Failed to add to wishlist');
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add to wishlist",
+        description: "Failed to add product to wishlist",
         variant: "destructive",
       });
     }
