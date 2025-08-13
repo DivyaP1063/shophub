@@ -63,7 +63,7 @@ const App = () => (
                   <Route path="buyer/orders" element={<BuyerOrders />} />
                   <Route path="buyer/profile" element={<BuyerProfile />} />
                   {/* Catch-all */}
-                  {/* <Route path="*" element={<NotFound />} /> */}
+                  <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
             </BrowserRouter>
