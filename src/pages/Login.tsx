@@ -79,10 +79,13 @@ const Login = () => {
           </form>
           
           <div className="mt-6 flex flex-col items-center">
-            <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => console.log('Google Login Failed')}
-            />
+            <div className="w-full">
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => console.log('Google Login Failed')}
+                width="100%" // Ensures full width
+              />
+            </div>
           </div>
           
           <div className="mt-6 text-center">

@@ -8,52 +8,65 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
 import { ArrowLeft, Upload } from 'lucide-react';
 import { api } from '@/lib/api';
 import { Product } from '@/types';
+
+const defaultSpecification = {
+  Generic: '',
+  ParticulateMatter: '',
+  VOC: '',
+  Humidity: '',
+  Temperature: '',
+};
 
 const EditProduct = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const dispatch = useAppDispatch();
-  
+
   const [product, setProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     price: '',
     stock: '',
-
+    features: [''],
+    specification: { ...defaultSpecification },
   });
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
 
-
   useEffect(() => {
     if (id && token) {
       fetchProduct();
     }
+    // eslint-disable-next-line
   }, [id, token]);
 
   const fetchProduct = async () => {
     if (!id) return;
-    
+
     try {
       const response = await api.products.getById(id);
       const productData = await response.json();
-      
+
       if (response.ok) {
         setProduct(productData);
         setFormData({
           title: productData.title,
           description: productData.description || '',
-          price: productData.price.toString(),  
+          price: productData.price.toString(),
           stock: productData.stock.toString(),
+          features: productData.features && Array.isArray(productData.features) && productData.features.length > 0
+            ? productData.features
+            : [''],
+          specification: productData.specification
+            ? { ...defaultSpecification, ...productData.specification }
+            : { ...defaultSpecification },
         });
       } else {
         toast({
@@ -61,7 +74,7 @@ const EditProduct = () => {
           description: "Failed to fetch product details",
           variant: "destructive",
         });
-        navigate('/seller/dashboard');
+        navigate('//seller/products');
       }
     } catch (error) {
       toast({
@@ -69,7 +82,7 @@ const EditProduct = () => {
         description: "Failed to fetch product details",
         variant: "destructive",
       });
-      navigate('/seller/dashboard');
+      navigate('/s/seller/products');
     } finally {
       setFetchLoading(false);
     }
@@ -79,7 +92,34 @@ const EditProduct = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleFeatureChange = (index: number, value: string) => {
+    setFormData(prev => {
+      const updatedFeatures = [...prev.features];
+      updatedFeatures[index] = value;
+      return { ...prev, features: updatedFeatures };
+    });
+  };
 
+  const addFeature = () => {
+    setFormData(prev => ({
+      ...prev,
+      features: [...prev.features, ''],
+    }));
+  };
+
+  const removeFeature = (index: number) => {
+    setFormData(prev => {
+      const updatedFeatures = prev.features.filter((_, i) => i !== index);
+      return { ...prev, features: updatedFeatures };
+    });
+  };
+
+  const handleSpecChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      specification: { ...prev.specification, [field]: value },
+    }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -89,7 +129,7 @@ const EditProduct = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!token || user?.role !== 'seller' || !id) {
       toast({
         title: "Error",
@@ -100,15 +140,24 @@ const EditProduct = () => {
     }
 
     setLoading(true);
-    
+
     try {
       const productFormData = new FormData();
       productFormData.append('title', formData.title);
       productFormData.append('description', formData.description);
       productFormData.append('price', formData.price);
       productFormData.append('stock', formData.stock);
-      
-      
+
+      // Features
+      formData.features.forEach(feature => {
+        if (feature.trim()) productFormData.append('features', feature);
+      });
+
+      // Specification
+      Object.entries(formData.specification).forEach(([key, value]) => {
+        productFormData.append(`specification[${key}]`, value);
+      });
+
       if (images.length > 0) {
         images.forEach(image => {
           productFormData.append('images', image);
@@ -116,13 +165,13 @@ const EditProduct = () => {
       }
 
       await dispatch(updateProduct({ id, productData: productFormData, token })).unwrap();
-      
+
       toast({
         title: "Success",
         description: "Product updated successfully!",
       });
-      
-      navigate('/seller/dashboard');
+
+      navigate('/seller/products');
     } catch (error) {
       toast({
         title: "Error",
@@ -171,7 +220,7 @@ const EditProduct = () => {
       <div className="mb-8">
         <Button
           variant="ghost"
-          onClick={() => navigate('/seller/dashboard')}
+          onClick={() => navigate('/seller/products')}
           className="mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -198,9 +247,9 @@ const EditProduct = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="price">Price ($)</Label>
+                <Label htmlFor="price">Price (₹)</Label>
                 <Input
                   id="price"
                   type="number"
@@ -226,7 +275,6 @@ const EditProduct = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <div className="space-y-2">
                 <Label htmlFor="stock">Stock Quantity</Label>
                 <Input
@@ -238,6 +286,51 @@ const EditProduct = () => {
                   placeholder="0"
                   required
                 />
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="space-y-2">
+              <Label>Features</Label>
+              {formData.features.map((feature, idx) => (
+                <div key={idx} className="flex items-center gap-2 mb-2">
+                  <Input
+                    value={feature}
+                    onChange={e => handleFeatureChange(idx, e.target.value)}
+                    placeholder={`Feature ${idx + 1}`}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => removeFeature(idx)}
+                    disabled={formData.features.length === 1}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" size="sm" onClick={addFeature}>
+                Add Feature
+              </Button>
+            </div>
+
+            {/* Specification */}
+            <div className="space-y-2">
+              <Label>Specification</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.keys(defaultSpecification).map((key) => (
+                  <div key={key} className="space-y-1">
+                    <Label htmlFor={`spec-${key}`}>{key}</Label>
+                    <Textarea
+                      id={`spec-${key}`}
+                      value={formData.specification[key]}
+                      onChange={e => handleSpecChange(key, e.target.value)}
+                      placeholder={`Enter ${key} specification`}
+                      rows={2}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -256,7 +349,7 @@ const EditProduct = () => {
                   ))}
                 </div>
               )}
-              
+
               <Label htmlFor="images">Upload New Images (Optional)</Label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
                 <div className="text-center">
@@ -305,7 +398,7 @@ const EditProduct = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate('/seller/dashboard')}
+                onClick={() => navigate('/seller/products')}
               >
                 Cancel
               </Button>

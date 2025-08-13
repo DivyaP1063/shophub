@@ -1,8 +1,8 @@
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
-const Product = require('../models/Product');
+const Order = require("../models/Order");
+const Cart = require("../models/Cart");
+const Product = require("../models/Product");
 const crypto = require("crypto");
-const razorpay = require("../config/razorpay"); 
+const razorpay = require("../config/razorpay");
 
 const orderController = {
   // Create order from cart
@@ -113,8 +113,10 @@ const orderController = {
   // Get seller's orders
   getSellerOrders: async (req, res) => {
     try {
-      const productIds = await Product.find({ seller: req.user._id }).distinct("_id");
-  
+      const productIds = await Product.find({ seller: req.user._id }).distinct(
+        "_id"
+      );
+
       const orders = await Order.find({
         "items.product": { $in: productIds },
       })
@@ -128,18 +130,18 @@ const orderController = {
           },
           {
             path: "user",
-            select: "name email", // buyer info
+            select: "name email address", // <-- include address here
           },
         ])
         .sort({ createdAt: -1 });
-  
+
       res.json(orders);
     } catch (error) {
       console.error("Error fetching seller orders:", error);
       res.status(500).json({ message: "Server error" });
     }
   },
-  
+
   // Update order status
   updateOrderStatus: async (req, res) => {
     try {

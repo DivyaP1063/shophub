@@ -17,10 +17,8 @@ const Products = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
-    if (products.length === 0) {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, products.length]);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   // Filtering and sorting in-memory
   const filteredProducts = useMemo(() => {
@@ -76,7 +74,6 @@ const Products = () => {
               </div>
             </div>
             
-            
             <Select value={priceFilter} onValueChange={setPriceFilter}>
               <SelectTrigger>
                 <SelectValue placeholder="Price Range" />
@@ -90,7 +87,6 @@ const Products = () => {
                 <SelectItem value="500+">$500+</SelectItem>
               </SelectContent>
             </Select>
-            
             
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger>
@@ -142,7 +138,10 @@ const Products = () => {
 
       {/* Products Grid/List */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className={viewMode === 'grid' 
+          ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          : "space-y-4"
+        }>
           {[...Array(8)].map((_, i) => (
             <div key={i} className="bg-gray-200 animate-pulse rounded-lg h-80"></div>
           ))}
@@ -158,7 +157,7 @@ const Products = () => {
         </div>
       ) : (
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">👗</div>
+          <div className="text-6xl mb-4">🛡️</div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">No items found</h3>
           <p className="text-gray-500 text-lg mb-6">Try adjusting your filters or search terms</p>
           <Button onClick={clearFilters} variant="outline" className="mr-4">

@@ -8,9 +8,25 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 
+interface Address {
+  houseNo: string;
+  landmark: string;
+  area: string;
+  district: string;
+  state: string;
+  pincode: string;
+}
+
+interface UserInfo {
+  name: string;
+  email: string;
+  address?: Address;
+}
+
 interface Order {
   _id: string;
-  user: string;
+  user: UserInfo;
+  items: any[];
   totalAmount: number;
   status: string;
   createdAt: string;
@@ -27,8 +43,8 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
 
   const fetchOrders = async (userRole: string, token: string): Promise<Order[]> => {
     try {
-      const endpoint = userRole === "seller" ? "http://localhost:5000/api/orders/seller" : "http://localhost:5000/api/orders/user";
-  
+      const endpoint = userRole === "seller" ? "https://banter-backend-vdd3.onrender.com/api/orders/seller" : "https://banter-backend-vdd3.onrender.com/api/orders/user";
+
       const response = await fetch(endpoint, {
         method: "GET",
         headers: {
@@ -41,7 +57,7 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
         throw new Error("Failed to fetch orders");
       }
   
-      const data = await response.json();
+      const data = await response.json(); 
       console.log(data);
       return data; // This is directly the array of orders
     } catch (error) {
@@ -93,7 +109,8 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
             <TableHeader>
               <TableRow>
                 <TableHead>Order ID</TableHead>
-                <TableHead>Product</TableHead>
+                <TableHead>{userRole === 'seller' ? 'Customer' : 'Product'}</TableHead>
+                {userRole === 'seller' && <TableHead>Address</TableHead>}
                 <TableHead>Amount</TableHead>
                 <TableHead>Date</TableHead>
               </TableRow>
@@ -102,25 +119,33 @@ const OrderManagement: React.FC<OrderManagementProps> = ({ userRole, token }) =>
               {orders.map((order) => (
                 <TableRow key={order._id}>
                   <TableCell className="font-mono">#{order._id}</TableCell>
-                  {userRole=='seller'?(
-                                      <TableCell>  {order.user.name}
-                                      </TableCell>
-                  ):(
-                  <TableCell>  {order.items.map((item, index) => (
-                    <span key={index}>
-                      {item.product?.title || "Unknown"}
-                      {index < order.items.length - 1 && ", "}
-                    </span>
-                  ))}</TableCell>
+                  {userRole === 'seller' ? (
+                    <TableCell>{order.user?.name}</TableCell>
+                  ) : (
+                    <TableCell>
+                      {order.items.map((item, index) => (
+                        <span key={index}>
+                          {item.product?.title || "Unknown"}
+                          {index < order.items.length - 1 && ", "}
+                        </span>
+                      ))}
+                    </TableCell>
                   )}
-                  
+                  {userRole === 'seller' && (
+                    <TableCell>
+                      {order.user?.address
+                        ? <>
+                            {order.user.address.houseNo}, {order.user.address.landmark}, {order.user.address.area},<br />
+                            {order.user.address.district}, {order.user.address.state} - {order.user.address.pincode}
+                          </>
+                        : <span className="text-gray-400">No address</span>
+                      }
+                    </TableCell>
+                  )}
                   <TableCell>₹{order.totalAmount}</TableCell>
-
                   <TableCell>
-                    
                     {new Date(order.createdAt).toLocaleDateString('en-GB')}
                   </TableCell>
-
                 </TableRow>
               ))}
             </TableBody>

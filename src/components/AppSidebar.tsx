@@ -25,7 +25,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const sellerItems = [
     { title: "Products", url: "/seller/products", icon: Package },
     { title: "Sales", url: "/seller/sales", icon: DollarSign },
-    { title: "Analytics", url: "/seller/analytics", icon: BarChart3 },
+    { title: "Orders", url: "/seller/orders", icon: ShoppingBag },
     { title: "Profile", url: "/seller/profile", icon: User },
   ];
 

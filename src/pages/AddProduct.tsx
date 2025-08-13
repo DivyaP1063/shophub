@@ -8,34 +8,65 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
 import { ArrowLeft, Upload } from 'lucide-react';
+
+const defaultSpecification = {
+  Generic: '',
+  ParticulateMatter: '',
+  VOC: '',
+  Humidity: '',
+  Temperature: '',
+};
 
 const AddProduct = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const dispatch = useAppDispatch();
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     price: '',
-    stock: ''
- 
+    stock: '',
+    features: [''],
+    specification: { ...defaultSpecification },
   });
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
-
-
-  
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleFeatureChange = (index: number, value: string) => {
+    setFormData(prev => {
+      const updatedFeatures = [...prev.features];
+      updatedFeatures[index] = value;
+      return { ...prev, features: updatedFeatures };
+    });
+  };
 
+  const addFeature = () => {
+    setFormData(prev => ({
+      ...prev,
+      features: [...prev.features, ''],
+    }));
+  };
+
+  const removeFeature = (index: number) => {
+    setFormData(prev => {
+      const updatedFeatures = prev.features.filter((_, i) => i !== index);
+      return { ...prev, features: updatedFeatures };
+    });
+  };
+
+  const handleSpecChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      specification: { ...prev.specification, [field]: value },
+    }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -45,7 +76,7 @@ const AddProduct = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!token || user?.role !== 'seller') {
       toast({
         title: "Error",
@@ -64,29 +95,37 @@ const AddProduct = () => {
       return;
     }
 
-
-
     setLoading(true);
-    
+
     try {
       const productFormData = new FormData();
       productFormData.append('title', formData.title);
       productFormData.append('description', formData.description);
       productFormData.append('price', formData.price);
       productFormData.append('stock', formData.stock);
-      
+
+      // Features
+      formData.features.forEach(feature => {
+        if (feature.trim()) productFormData.append('features', feature);
+      });
+
+      // Specification
+      Object.entries(formData.specification).forEach(([key, value]) => {
+        productFormData.append(`specification[${key}]`, value);
+      });
+
       images.forEach(image => {
         productFormData.append('images', image);
       });
 
       await dispatch(createProduct({ productData: productFormData, token })).unwrap();
-      
+
       toast({
         title: "Success",
         description: "Product created successfully!",
       });
-      
-      navigate('/seller/dashboard');
+
+      navigate('/seller/products');
     } catch (error) {
       toast({
         title: "Error",
@@ -121,7 +160,7 @@ const AddProduct = () => {
           Back to Dashboard
         </Button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Add New Product</h1>
-        <p className="text-gray-600">Create a new product for your fashion store.</p>
+        <p className="text-gray-600">Create a new product for your store.</p>
       </div>
 
       <Card>
@@ -141,9 +180,9 @@ const AddProduct = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="price">Price ($)</Label>
+                <Label htmlFor="price">Price (₹)</Label>
                 <Input
                   id="price"
                   type="number"
@@ -169,7 +208,6 @@ const AddProduct = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <div className="space-y-2">
                 <Label htmlFor="stock">Stock Quantity</Label>
                 <Input
@@ -184,7 +222,52 @@ const AddProduct = () => {
               </div>
             </div>
 
+            {/* Features */}
+            <div className="space-y-2">
+              <Label>Features</Label>
+              {formData.features.map((feature, idx) => (
+                <div key={idx} className="flex items-center gap-2 mb-2">
+                  <Input
+                    value={feature}
+                    onChange={e => handleFeatureChange(idx, e.target.value)}
+                    placeholder={`Feature ${idx + 1}`}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => removeFeature(idx)}
+                    disabled={formData.features.length === 1}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" size="sm" onClick={addFeature}>
+                Add Feature
+              </Button>
+            </div>
 
+            {/* Specification */}
+            <div className="space-y-2">
+              <Label>Specification</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.keys(defaultSpecification).map((key) => (
+                  <div key={key} className="space-y-1">
+                    <Label htmlFor={`spec-${key}`}>{key}</Label>
+                    <Textarea
+                      id={`spec-${key}`}
+                      value={formData.specification[key]}
+                      onChange={e => handleSpecChange(key, e.target.value)}
+                      placeholder={`Enter ${key} specification`}
+                      rows={2}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Images */}
             <div className="space-y-2">
               <Label htmlFor="images">Product Images</Label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
@@ -235,7 +318,7 @@ const AddProduct = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate('/seller/dashboard')}
+                onClick={() => navigate('/seller/products')}
               >
                 Cancel
               </Button>

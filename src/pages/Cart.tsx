@@ -138,7 +138,7 @@ const CartPage = () => {
     if (!user || !token) return;
     setSavingAddress(true);
     try {
-      const res = await fetch('http://localhost:5000/api/user/address', {
+      const res = await fetch('https://banter-backend-vdd3.onrender.com/api/user/address', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user._id, address }),
@@ -178,7 +178,7 @@ const CartPage = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/orders/user', {
+      const res = await fetch('https://banter-backend-vdd3.onrender.com/api/orders/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const CartPage = () => {
         handler: async (resp: any) => {
           try {
             const verifyRes = await fetch(
-              'http://localhost:5000/api/orders/verify-payment',
+              'https://banter-backend-vdd3.onrender.com/api/orders/verify-payment',
               {
                 method: 'POST',
                 headers: {

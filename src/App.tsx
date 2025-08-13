@@ -26,6 +26,7 @@ import Layout from "./pages/Layout";
 import Admin from "./pages/Admin";
 import AdminRegister from "./pages/AdminRegister";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import SellerOrders from "./pages/seller/SellerOrders";
 
 const queryClient = new QueryClient();
 
@@ -55,7 +56,8 @@ const App = () => (
                   <Route path="seller/products/:id/edit" element={<EditProduct />} />
                   <Route path="seller/products" element={<SellerProducts />} />
                   <Route path="seller/sales" element={<SellerSales />} />
-                  <Route path="seller/analytics" element={<SellerAnalytics />} />
+                  <Route path="seller/orders" element={<SellerOrders />} />
+                  {/* <Route path="seller/analytics" element={<SellerAnalytics />} /> */}
                   <Route path="seller/profile" element={<SellerProfile />} />
                   {/* Buyer Routes */}
                   <Route path="buyer/orders" element={<BuyerOrders />} />

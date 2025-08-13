@@ -107,16 +107,6 @@ const SellerSales = () => {
             </CardContent>
           </Card>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-            <CardDescription>Latest orders from your customers</CardDescription>
-          </CardHeader>
-          <CardContent>
-          <OrderManagement userRole={user.role} token={token} />
-          </CardContent>
-        </Card>
       </div>
     </DashboardLayout>
   );

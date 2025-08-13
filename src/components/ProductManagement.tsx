@@ -92,7 +92,7 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ products, onRefre
                   </TableCell>
                   <TableCell>
                   </TableCell>
-                  <TableCell>${product.price}</TableCell>
+                  <TableCell>₹{product.price}</TableCell>
                   <TableCell>
                     <Badge 
                       variant={product.stock > 0 ? "default" : "destructive"}

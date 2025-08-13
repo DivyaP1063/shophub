@@ -8,6 +8,8 @@ import { ArrowLeft, Heart, ShoppingCart } from 'lucide-react';
 import { Product } from '@/types';
 import { api } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +17,7 @@ const ProductDetail = () => {
   const { user, token } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -53,11 +56,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     if (!token) {
-      toast({
-        title: "Error",
-        description: "Please login to add items to cart",
-        variant: "destructive",
-      });
+      setShowAuthModal(true);
       return;
     }
 
@@ -91,11 +90,7 @@ const ProductDetail = () => {
 
   const handleAddToWishlist = async () => {
     if (!token) {
-      toast({
-        title: "Error",
-        description: "Please login to add items to wishlist",
-        variant: "destructive",
-      });
+      setShowAuthModal(true);
       return;
     }
 
@@ -124,6 +119,30 @@ const ProductDetail = () => {
     }
   };
 
+  // Helper function to render features/specification if present
+  const renderFeatures = () =>
+    product?.features && product.features.length > 0 ? (
+      <ul className="list-disc ml-6 text-gray-700 mb-2">
+        {product.features.map((feature, idx) => (
+          <li key={idx}>{feature}</li>
+        ))}
+      </ul>
+    ) : <span className="text-gray-400">No features listed.</span>;
+
+  const renderSpecification = () =>
+    product?.specification ? (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+        {Object.entries(product.specification).map(([key, value]) =>
+          value ? (
+            <div key={key}>
+              <span className="font-medium">{key}:</span>
+              <div className="whitespace-pre-line text-sm mt-1">{value}</div>
+            </div>
+          ) : null
+        )}
+      </div>
+    ) : <span className="text-gray-400">No specification available.</span>;
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -145,13 +164,6 @@ const ProductDetail = () => {
     );
   }
 
-  // Helper function to get seller name
-  const getSellerName = () => {
-    if (typeof product.seller === 'object' && product.seller !== null) {
-      return product.seller.name || 'Unknown Seller';
-    }
-    return 'Unknown Seller';
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -195,31 +207,48 @@ const ProductDetail = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {product.title}
             </h1>
-            <p className="text-2xl font-bold text-gray-900">
-              ${product.price}
-            </p>
-          </div>
-
-          {product.description && (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Description</h3>
-              <p className="text-gray-600">{product.description}</p>
+            <div className="flex items-center mb-2">
+              <span className="text-4xl font-extrabold text-primary mr-2">
+                ₹{Number(product.price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              </span>
+              {/* Optionally, you can add a badge for offers/discounts here */}
             </div>
-          )}
-
-
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Availability</h3>
-            <Badge variant={product.stock > 0 ? "default" : "destructive"}>
-              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-            </Badge>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Seller</h3>
-            <p className="text-gray-600">{getSellerName()}</p>
-          </div>
+          <Accordion type="multiple" className="mb-4">
+            <AccordionItem value="description">
+              <AccordionTrigger>Description</AccordionTrigger>
+              <AccordionContent>
+                <p className="text-gray-600">{product.description || "No description available."}</p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="features">
+              <AccordionTrigger>Features</AccordionTrigger>
+              <AccordionContent>
+                {renderFeatures()}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="specification">
+              <AccordionTrigger>Specification</AccordionTrigger>
+              <AccordionContent>
+                {renderSpecification()}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="availability">
+              <AccordionTrigger>Availability</AccordionTrigger>
+              <AccordionContent>
+                <Badge variant={product.stock > 0 ? "default" : "destructive"}>
+                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                </Badge>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="seller">
+              <AccordionTrigger>Seller</AccordionTrigger>
+              <AccordionContent>
+                <p className="text-gray-600">Mythri InnovoTech Solutions Pvt Ltd</p>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
           <div className="flex space-x-4">
             <Button 
@@ -239,6 +268,51 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
+        <DialogContent className="max-w-sm rounded-2xl shadow-lg">
+          <DialogHeader className="text-center space-y-2">
+            <DialogTitle className="text-xl font-semibold">
+              Welcome to <span className="text-primary">Safeguard Air</span>
+            </DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Please choose an option to continue
+            </p>
+          </DialogHeader>
+
+          <div className="mt-4 flex flex-row gap-4 justify-center items-start">
+            <div className="flex flex-col items-center flex-1">
+              <p className="mb-2 font-medium">Already a user?</p>
+              <Button
+                className="w-full"
+                size="lg"
+                onClick={() => {
+                  setShowAuthModal(false);
+                  navigate("/login");
+                }}
+              >
+                Login
+              </Button>
+            </div>
+
+            <div className="flex flex-col items-center flex-1">
+              <p className="mb-2 font-medium">New here?</p>
+              <Button
+                className="w-full bg-white text-black border border-gray-300 font-bold"
+                size="lg"
+                variant="outline"
+                onClick={() => {
+                  setShowAuthModal(false);
+                  navigate("/register");
+                }}
+              >
+                Create Account
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

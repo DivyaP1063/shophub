@@ -1,18 +1,10 @@
-
-const Product = require('../models/Product');
+const Product = require("../models/Product");
 
 const productController = {
   // Get all products with filtering and pagination
   getAllProducts: async (req, res) => {
     try {
-      const {
-        search,
-        price,
-        sort,
-        page = 1,
-        limit = 20,
-        seller
-      } = req.query;
+      const { search, price, sort, page = 1, limit = 20, seller } = req.query;
 
       let query = {};
 
@@ -21,15 +13,14 @@ const productController = {
         query.$text = { $search: search };
       }
 
-
       // Price filter
-      if (price && price !== 'all') {
+      if (price && price !== "all") {
         const priceRanges = {
-          '0-50': { $lte: 50 },
-          '50-100': { $gte: 50, $lte: 100 },
-          '100-200': { $gte: 100, $lte: 200 },
-          '200-500': { $gte: 200, $lte: 500 },
-          '500+': { $gte: 500 }
+          "0-50": { $lte: 50 },
+          "50-100": { $gte: 50, $lte: 100 },
+          "100-200": { $gte: 100, $lte: 200 },
+          "200-500": { $gte: 200, $lte: 500 },
+          "500+": { $gte: 500 },
         };
         if (priceRanges[price]) {
           query.price = priceRanges[price];
@@ -44,16 +35,16 @@ const productController = {
       // Sort options
       let sortOption = {};
       switch (sort) {
-        case 'price-low':
+        case "price-low":
           sortOption = { price: 1 };
           break;
-        case 'price-high':
+        case "price-high":
           sortOption = { price: -1 };
           break;
-        case 'popular':
+        case "popular":
           sortOption = { createdAt: -1 }; // Placeholder for popularity
           break;
-        case 'rating':
+        case "rating":
           sortOption = { createdAt: -1 }; // Placeholder for rating
           break;
         default:
@@ -61,7 +52,7 @@ const productController = {
       }
 
       const products = await Product.find(query)
-        .populate('seller', 'name email')
+        .populate("seller", "name email")
         .sort(sortOption)
         .limit(limit * 1)
         .skip((page - 1) * limit);
@@ -72,41 +63,46 @@ const productController = {
         products,
         totalPages: Math.ceil(total / limit),
         currentPage: page,
-        total
+        total,
       });
     } catch (error) {
-      console.error('Error fetching products:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error("Error fetching products:", error);
+      res.status(500).json({ message: "Server error" });
     }
   },
 
   // Get single product
   getProductById: async (req, res) => {
     try {
-      const product = await Product.findById(req.params.id)
-        .populate('seller', 'name email');
-      
+      const product = await Product.findById(req.params.id).populate(
+        "seller",
+        "name email"
+      );
+
       if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
+        return res.status(404).json({ message: "Product not found" });
       }
 
       res.json(product);
     } catch (error) {
-      console.error('Error fetching product:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error("Error fetching product:", error);
+      res.status(500).json({ message: "Server error" });
     }
   },
 
   // Create product
   createProduct: async (req, res) => {
     try {
-      const { title, description, price, stock } = req.body;
+      const { title, description, price, stock, features, specification } =
+        req.body;
 
       if (!req.files || req.files.length === 0) {
-        return res.status(400).json({ message: 'At least one image is required' });
+        return res
+          .status(400)
+          .json({ message: "At least one image is required" });
       }
 
-      const images = req.files.map(file => file.path);
+      const images = req.files.map((file) => file.path);
 
       const product = new Product({
         seller: req.user._id,
@@ -114,16 +110,18 @@ const productController = {
         description,
         price: parseFloat(price),
         images,
-        stock: parseInt(stock)
+        stock: parseInt(stock),
+        features: Array.isArray(features) ? features : [],
+        specification: specification || {},
       });
 
       await product.save();
-      await product.populate('seller', 'name email');
+      await product.populate("seller", "name email");
 
       res.status(201).json(product);
     } catch (error) {
-      console.error('Error creating product:', error);
-      res.status(500).json({ message: 'Server error', error });
+      console.error("Error creating product:", error);
+      res.status(500).json({ message: "Server error", error });
     }
   },
 
@@ -133,33 +131,38 @@ const productController = {
       const product = await Product.findById(req.params.id);
 
       if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
+        return res.status(404).json({ message: "Product not found" });
       }
 
       if (product.seller.toString() !== req.user._id.toString()) {
-        return res.status(403).json({ message: 'Not authorized to update this product' });
+        return res
+          .status(403)
+          .json({ message: "Not authorized to update this product" });
       }
 
-      const { title, description, price,  stock } = req.body;
-      
+      const { title, description, price, stock, features, specification } =
+        req.body;
+
       // Update fields
       if (title) product.title = title;
       if (description) product.description = description;
       if (price) product.price = parseFloat(price);
       if (stock !== undefined) product.stock = parseInt(stock);
+      if (features) product.features = Array.isArray(features) ? features : [];
+      if (specification) product.specification = specification;
 
       // Update images if new ones are uploaded
       if (req.files && req.files.length > 0) {
-        product.images = req.files.map(file => file.path);
+        product.images = req.files.map((file) => file.path);
       }
 
       await product.save();
-      await product.populate('seller', 'name email');
+      await product.populate("seller", "name email");
 
       res.json(product);
     } catch (error) {
-      console.error('Error updating product:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error("Error updating product:", error);
+      res.status(500).json({ message: "Server error" });
     }
   },
 
@@ -169,20 +172,22 @@ const productController = {
       const product = await Product.findById(req.params.id);
 
       if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
+        return res.status(404).json({ message: "Product not found" });
       }
 
       if (product.seller.toString() !== req.user._id.toString()) {
-        return res.status(403).json({ message: 'Not authorized to delete this product' });
+        return res
+          .status(403)
+          .json({ message: "Not authorized to delete this product" });
       }
 
       await Product.findByIdAndDelete(req.params.id);
-      res.json({ message: 'Product deleted successfully' });
+      res.json({ message: "Product deleted successfully" });
     } catch (error) {
-      console.error('Error deleting product:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error("Error deleting product:", error);
+      res.status(500).json({ message: "Server error" });
     }
-  }
+  },
 };
 
 module.exports = productController;

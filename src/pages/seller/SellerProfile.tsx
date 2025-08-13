@@ -30,43 +30,10 @@ const SellerProfile = () => {
       <div className="p-6 space-y-6 ">
         <div>
           <h1 className="text-3xl font-bold">Profile</h1>
-          <p className="text-muted-foreground">Manage your seller profile and store information</p>
+          <p className="text-muted-foreground">Manage your Admin profile and store information</p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          <Card className="md:col-span-1">
-            <CardHeader>
-              <CardTitle>Profile Picture</CardTitle>
-              <CardDescription>Update your profile image</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-col items-center space-y-4">
-                <Avatar className="w-24 h-24">
-                  <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="text-lg">JS</AvatarFallback>
-                </Avatar>
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
-                  <Camera className="w-4 h-4" />
-                  Change Photo
-                </Button>
-              </div>
-              <Separator />
-              <div className="space-y-2">
- 
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{profile.email}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{profile.phone}</span>
-                </div>
-              </div>
-              <Badge variant="secondary" className="w-full justify-center">
-                Verified Seller
-              </Badge>
-            </CardContent>
-          </Card>
+        <div className="grid gap-6 md:grid-cols-1">
 
           <Card className="md:col-span-2">
             <CardHeader>
