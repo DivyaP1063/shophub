@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://banter-backend-vdd3.onrender.com/api';
+const API_BASE_URL = 'https://shophub-backend-qebe.onrender.com/api';
 
 export const api = {
   // Auth endpoints
