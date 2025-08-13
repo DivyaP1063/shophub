@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 const authController = {
   // Register user
@@ -10,7 +10,7 @@ const authController = {
       // Check if user already exists
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: 'User already exists' });
+        return res.status(400).json({ message: "User already exists" });
       }
 
       // Create new user
@@ -18,11 +18,9 @@ const authController = {
       await user.save();
 
       // Generate JWT token
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: '7d' }
-      );
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
 
       res.status(201).json({
         token,
@@ -33,38 +31,36 @@ const authController = {
           role: user.role,
           address: user.address, // Include address
           createdAt: user.createdAt,
-          updatedAt: user.updatedAt
-        }
+          updatedAt: user.updatedAt,
+        },
       });
     } catch (error) {
-      console.error('Registration error:', error);
-      res.status(500).json({ message: 'Server error during registration' });
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Server error during registration" });
     }
   },
 
   // Login user
   login: async (req, res) => {
+    const { email, password } = req.body;
     try {
-      const { email, password } = req.body;
-
-      // Find user
       const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+      if (!user)
+        return res.status(400).json({ message: "Invalid credentials" });
+
+      // If user has no password (Google user), block normal login
+      if (!user.password) {
+        return res.status(400).json({ message: "Please login with Google" });
       }
 
-      // Check password
       const isMatch = await user.comparePassword(password);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials' });
-      }
+      if (!isMatch)
+        return res.status(400).json({ message: "Invalid credentials" });
 
       // Generate JWT token
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: '7d' }
-      );
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
 
       res.json({
         token,
@@ -75,14 +71,14 @@ const authController = {
           role: user.role,
           address: user.address, // Include address
           createdAt: user.createdAt,
-          updatedAt: user.updatedAt
-        }
+          updatedAt: user.updatedAt,
+        },
       });
     } catch (error) {
-      console.error('Login error:', error);
-      res.status(500).json({ message: 'Server error during login' });
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Server error during login" });
     }
-  }
+  },
 };
 
 module.exports = authController;

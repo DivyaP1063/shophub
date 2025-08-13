@@ -138,11 +138,12 @@ const CartPage = () => {
     if (!user || !token) return;
     setSavingAddress(true);
     try {
-      const res = await fetch('https://shophub-backend-qebe.onrender.com/api/user/address', {
+      const res = await fetch('http://localhost:5000/api/user/address', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user._id, address }),
       });
+      console.log('Sending address update:', { userId: user._id, address });
       if (!res.ok) throw new Error('Failed to update address');
 
       updateUser({ ...user, address });
@@ -177,7 +178,7 @@ const CartPage = () => {
     }
 
     try {
-      const res = await fetch('https://shophub-backend-qebe.onrender.com/api/orders/user', {
+      const res = await fetch('http://localhost:5000/api/orders/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -197,7 +198,7 @@ const CartPage = () => {
         handler: async (resp: any) => {
           try {
             const verifyRes = await fetch(
-              'https://shophub-backend-qebe.onrender.com/api/orders/verify-payment',
+              'http://localhost:5000/api/orders/verify-payment',
               {
                 method: 'POST',
                 headers: {

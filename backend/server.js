@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -26,6 +25,17 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigins = [
+  "http://localhost:8080", // Vite local dev
+  "https://shophub-frontend.onrender.com", // your deployed frontend
+  // add more domains as needed
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 // Cloudinary configuration
 cloudinary.config({
@@ -59,6 +69,8 @@ app.put("/api/user/address", async (req, res) => {
         .status(400)
         .json({ message: "userId and address are required." });
     }
+
+    console.log("Received address update:", req.body);
 
     // Validate structure
     const requiredFields = [
@@ -168,3 +180,4 @@ app.get('/api/health', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+

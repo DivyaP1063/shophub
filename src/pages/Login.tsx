@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,14 +17,23 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
-      await login(email, password);
+      await login(email, password); // Only use AuthContext login
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    try {
+      await login('', credentialResponse.credential, true); // email is not needed, token is enough
+      navigate('/');
+    } catch (error) {
+      console.error('Google login error:', error);
     }
   };
 
@@ -68,6 +77,13 @@ const Login = () => {
               {loading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
+          
+          <div className="mt-6 flex flex-col items-center">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => console.log('Google Login Failed')}
+            />
+          </div>
           
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">

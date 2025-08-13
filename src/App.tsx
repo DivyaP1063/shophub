@@ -25,8 +25,11 @@ import BuyerProfile from "./pages/buyer/BuyerProfile";
 import Layout from "./pages/Layout";
 import Admin from "./pages/Admin";
 import AdminRegister from "./pages/AdminRegister";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const queryClient = new QueryClient();
+
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const App = () => (
   <Provider store={store}>
@@ -35,32 +38,34 @@ const App = () => (
         <Toaster />
         <Sonner />
         <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="login" element={<Login />} />
-                <Route path="Admin" element={<Admin />} />
-                <Route path="register" element={<Register />} />
-                <Route path="Adminregister" element={<AdminRegister />} />
-                <Route path="products" element={<Products />} />
-                <Route path="products/:id" element={<ProductDetail />} />
-                <Route path="cart" element={<CartPage />} />
-                <Route path="wishlist" element={<WishlistPage />} />
-                <Route path="seller/products/new" element={<AddProduct />} />
-                <Route path="seller/products/:id/edit" element={<EditProduct />} />
-                <Route path="seller/products" element={<SellerProducts />} />
-                <Route path="seller/sales" element={<SellerSales />} />
-                <Route path="seller/analytics" element={<SellerAnalytics />} />
-                <Route path="seller/profile" element={<SellerProfile />} />
-                {/* Buyer Routes */}
-                <Route path="buyer/orders" element={<BuyerOrders />} />
-                <Route path="buyer/profile" element={<BuyerProfile />} />
-                {/* Catch-all */}
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+          <GoogleOAuthProvider clientId={clientId}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="Admin" element={<Admin />} />
+                  <Route path="register" element={<Register />} />
+                  <Route path="Adminregister" element={<AdminRegister />} />
+                  <Route path="products" element={<Products />} />
+                  <Route path="products/:id" element={<ProductDetail />} />
+                  <Route path="cart" element={<CartPage />} />
+                  <Route path="wishlist" element={<WishlistPage />} />
+                  <Route path="seller/products/new" element={<AddProduct />} />
+                  <Route path="seller/products/:id/edit" element={<EditProduct />} />
+                  <Route path="seller/products" element={<SellerProducts />} />
+                  <Route path="seller/sales" element={<SellerSales />} />
+                  <Route path="seller/analytics" element={<SellerAnalytics />} />
+                  <Route path="seller/profile" element={<SellerProfile />} />
+                  {/* Buyer Routes */}
+                  <Route path="buyer/orders" element={<BuyerOrders />} />
+                  <Route path="buyer/profile" element={<BuyerProfile />} />
+                  {/* Catch-all */}
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </GoogleOAuthProvider>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>

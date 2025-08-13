@@ -1,5 +1,4 @@
-
-const API_BASE_URL = 'https://shophub-backend-qebe.onrender.com/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 export const api = {
   // Auth endpoints
@@ -15,6 +14,11 @@ export const api = {
       body: JSON.stringify(data),
     }),
     logout: () => fetch(`${API_BASE_URL}/auth/logout`, { method: 'POST' }),
+    google: (data: any) => fetch(`${API_BASE_URL}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }),
   },
 
   // Products endpoints

@@ -37,17 +37,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (email: string, password: string) => {
+  // Normal login (email/password)
+  const login = async (email: string, passwordOrToken: string, isGoogle?: boolean) => {
     try {
-      const response = await api.auth.login({ email, password });
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || 'Login failed');
-
-      setToken(data.token);
-      setUser(data.user);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      let data, response;
+      if (isGoogle) {
+        // Google login: passwordOrToken is actually the Google token
+        response = await api.auth.google({ token: passwordOrToken });
+        data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Google login failed');
+        setToken(data.token);
+        setUser({
+          _id: data.userId, // <-- Add this line!
+          name: data.name,
+          email: data.email,
+          role: data.role,
+          address: data.address,
+        });
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify({
+          _id: data.userId, // <-- Add this line!
+          name: data.name,
+          email: data.email,
+          role: data.role,
+          address: data.address,
+        }));
+      } else {
+        // Normal login
+        response = await api.auth.login({ email, password: passwordOrToken });
+        data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Login failed');
+        setToken(data.token);
+        setUser(data.user);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
       toast({
         title: 'Success',
         description: 'Logged in successfully!',
@@ -98,7 +122,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  // 🔹 New function to update user state + localStorage
   const updateUser = (updatedUser: User) => {
     setUser(updatedUser);
     localStorage.setItem('user', JSON.stringify(updatedUser));
@@ -111,7 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     register,
     logout,
     loading,
-    updateUser, // expose it here
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
