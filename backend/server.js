@@ -1,21 +1,20 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const cloudinary = require('cloudinary').v2;
-const multer = require('multer');
-const User = require('./models/User');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+const User = require("./models/User");
 
 // Load environment variables
 dotenv.config();
 
 // Import routes
-const authRoutes = require('./routes/auth');
-const productRoutes = require('./routes/products');
-const cartRoutes = require('./routes/cart');
-const wishlistRoutes = require('./routes/wishlist');
-const orderRoutes = require('./routes/orders');
-
+const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/products");
+const cartRoutes = require("./routes/cart");
+const wishlistRoutes = require("./routes/wishlist");
+const orderRoutes = require("./routes/orders");
 
 const app = express();
 app.use(express.json());
@@ -32,10 +31,22 @@ const allowedOrigins = [
   // add more domains as needed
 ];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(
+        new Error("CORS policy: This origin is not allowed - " + origin),
+        false
+      );
+    },
+    credentials: true,
+  })
+);
 
 // Cloudinary configuration
 cloudinary.config({
@@ -45,19 +56,20 @@ cloudinary.config({
 });
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shophub', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected successfully'))
-.catch(err => console.error('MongoDB connection error:', err));
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/shophub", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/wishlist', wishlistRoutes);
-app.use('/api/orders', orderRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.put("/api/user/address", async (req, res) => {
   try {
@@ -135,11 +147,9 @@ app.put("/api/user/update", async (req, res) => {
       ];
       for (const field of requiredFields) {
         if (!address[field] || typeof address[field] !== "string") {
-          return res
-            .status(400)
-            .json({
-              message: `Address field '${field}' is missing or invalid.`,
-            });
+          return res.status(400).json({
+            message: `Address field '${field}' is missing or invalid.`,
+          });
         }
       }
       updateData.address = address;
@@ -165,19 +175,17 @@ app.put("/api/user/update", async (req, res) => {
   }
 });
 
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  res.status(500).json({ message: "Something went wrong!" });
 });
 
 // Health check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
+app.get("/api/health", (req, res) => {
+  res.json({ status: "OK", message: "Server is running" });
 });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
