@@ -25,28 +25,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const allowedOrigins = [
-  "http://localhost:8080", // Vite local dev
-  "https://shophub-frontend.onrender.com", // your deployed frontend
-  // add more domains as needed
-];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, curl, etc.)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(
-        new Error("CORS policy: This origin is not allowed - " + origin),
-        false
-      );
-    },
-    credentials: true,
-  })
-);
 
 // Cloudinary configuration
 cloudinary.config({
