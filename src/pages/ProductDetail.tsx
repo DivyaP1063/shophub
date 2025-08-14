@@ -200,7 +200,7 @@ const ProductDetail = () => {
           )}
         </div>
 
-        {/* Product Info */}
+        {/* Product Info with fixed height and scroll */}
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -210,44 +210,30 @@ const ProductDetail = () => {
               <span className="text-4xl font-extrabold text-primary mr-2">
                 ₹{Number(product.price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
-              {/* Optionally, you can add a badge for offers/discounts here */}
             </div>
           </div>
 
-          <Accordion type="multiple" className="mb-4">
-            <AccordionItem value="description">
-              <AccordionTrigger>Description</AccordionTrigger>
-              <AccordionContent>
-                <p className="text-gray-600">{product.description || "No description available."}</p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="features">
-              <AccordionTrigger>Features</AccordionTrigger>
-              <AccordionContent>
-                {renderFeatures()}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="specification">
-              <AccordionTrigger>Specification</AccordionTrigger>
-              <AccordionContent>
-                {renderSpecification()}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="availability">
-              <AccordionTrigger>Availability</AccordionTrigger>
-              <AccordionContent>
-                <Badge variant={product.stock > 0 ? "default" : "destructive"}>
-                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                </Badge>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="seller">
-              <AccordionTrigger>Seller</AccordionTrigger>
-              <AccordionContent>
-                <p className="text-gray-600">Mythri InnovoTech Solutions Pvt Ltd</p>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <div
+            className="bg-white rounded-lg shadow border p-4"
+            style={{ maxHeight: 350, overflowY: 'auto' }}
+          >
+            <h3 className="text-lg font-semibold mb-2">Description</h3>
+            <p className="text-gray-600 mb-4">{product.description || "No description available."}</p>
+
+            <h3 className="text-lg font-semibold mb-2">Features</h3>
+            {renderFeatures()}
+
+            <h3 className="text-lg font-semibold mb-2">Specification</h3>
+            {renderSpecification()}
+
+            <h3 className="text-lg font-semibold mb-2">Availability</h3>
+            <Badge variant={product.stock > 0 ? "default" : "destructive"}>
+              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+            </Badge>
+
+            <h3 className="text-lg font-semibold mb-2 mt-4">Seller</h3>
+            <p className="text-gray-600">Mythri InnovoTech Solutions Pvt Ltd</p>
+          </div>
 
           <div className="flex space-x-4">
             <Button 
