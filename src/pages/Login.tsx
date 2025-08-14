@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       await login(email, password); // Only use AuthContext login
-      navigate('/');
+      navigate('/products');
     } catch (error) {
       console.error('Login error:', error);
     } finally {
