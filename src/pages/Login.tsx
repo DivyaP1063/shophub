@@ -85,12 +85,14 @@ const Login = () => {
             <div className="flex-grow h-px bg-gray-200" />
           </div>
 
-          <div className="w-full flex justify-center google-signin-full-width">
+          <div className="w-full google-signin-full-width">
             <GoogleLogin
               onSuccess={handleGoogleLogin}
-              onError={() => console.log('Google Login Failed')}
+              onError={() => console.log("Google Login Failed")}
               shape="rect"
               size="large"
+              theme="filled_blue"
+              width="100%" // Ask Google for full width
             />
           </div>
           

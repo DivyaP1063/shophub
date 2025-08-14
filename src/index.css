@@ -103,7 +103,8 @@
 }
 
 /* Force Google button to full width */
-.google-signin-full-width > div {
+.google-signin-full-width iframe {
   width: 100% !important;
+  min-width: unset !important;
   display: block !important;
 }
