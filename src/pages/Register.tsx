@@ -22,7 +22,7 @@ const Register = () => {
     setLoading(true);
     try {
       await register(name, email, password, role);
-      navigate('/');
+      navigate('/products');
     } catch (error) {
       console.error('Registration error:', error);
     } finally {
@@ -33,7 +33,7 @@ const Register = () => {
   const handleGoogleLogin = async (credentialResponse: any) => {
     try {
       await login('', credentialResponse.credential, true); // email not needed, pass credential and google flag
-      navigate('/');
+      navigate('/products');
     } catch (error) {
       console.error('Google login error:', error);
     }
