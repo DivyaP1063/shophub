@@ -31,7 +31,7 @@ const Login = () => {
   const handleGoogleLogin = async (credentialResponse: any) => {
     try {
       await login('', credentialResponse.credential, true); // email is not needed, token is enough
-      navigate('/');
+      navigate('/products');
     } catch (error) {
       console.error('Google login error:', error);
     }
