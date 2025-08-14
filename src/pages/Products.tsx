@@ -80,11 +80,11 @@ const Products = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Prices</SelectItem>
-                <SelectItem value="0-50">Under $50</SelectItem>
-                <SelectItem value="50-100">$50 - $100</SelectItem>
-                <SelectItem value="100-200">$100 - $200</SelectItem>
-                <SelectItem value="200-500">$200 - $500</SelectItem>
-                <SelectItem value="500+">$500+</SelectItem>
+                <SelectItem value="0-50">Under ₹50</SelectItem>
+                <SelectItem value="50-100">₹50 - ₹100</SelectItem>
+                <SelectItem value="100-200">₹100 - ₹200</SelectItem>
+                <SelectItem value="200-500">₹200 - ₹500</SelectItem>
+                <SelectItem value="500+">₹500+</SelectItem>
               </SelectContent>
             </Select>
             
@@ -152,7 +152,11 @@ const Products = () => {
           : "space-y-4"
         }>
           {filteredProducts.map((product) => (
-            <ProductCard key={product._id} product={product} viewMode={viewMode} />
+            <ProductCard 
+              key={product._id} 
+              product={product} 
+              viewMode={viewMode}
+            />
           ))}
         </div>
       ) : (

@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAppDispatch } from '@/store/hooks';
+import { openAuthModal } from '@/store/authModalSlice';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Heart, ShoppingCart } from 'lucide-react';
 import { Product } from '@/types';
 import { api } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, token } = useAuth();
+  const dispatch = useAppDispatch();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -55,10 +54,13 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
+    // If not logged in, open auth modal
     if (!user || !token) {
-      setShowAuthModal(true);
+      dispatch(openAuthModal());
       return;
     }
+
+    // If logged in but not a buyer, show error
     if (user.role !== 'buyer') {
       toast({
         title: "Error",
@@ -67,6 +69,7 @@ const ProductDetail = () => {
       });
       return;
     }
+
     try {
       const response = await api.cart.add({ product: product._id, quantity: 1 }, token);
       if (response.ok) {
@@ -87,10 +90,13 @@ const ProductDetail = () => {
   };
 
   const handleAddToWishlist = async () => {
+    // If not logged in, open auth modal
     if (!user || !token) {
-      setShowAuthModal(true);
+      dispatch(openAuthModal());
       return;
     }
+
+    // If logged in but not a buyer, show error
     if (user.role !== 'buyer') {
       toast({
         title: "Error",
@@ -99,6 +105,7 @@ const ProductDetail = () => {
       });
       return;
     }
+
     try {
       const response = await api.wishlist.add({ product: product._id }, token);
       if (response.ok) {
@@ -142,6 +149,9 @@ const ProductDetail = () => {
       </div>
     ) : <span className="text-gray-400">No specification available.</span>;
 
+  // Show cart/wishlist buttons for: not logged in OR logged in buyers (but not sellers)
+  const showCartButtons = !user || user.role === 'buyer';
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -163,7 +173,6 @@ const ProductDetail = () => {
     );
   }
 
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <Button
@@ -176,18 +185,18 @@ const ProductDetail = () => {
       </Button>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Product Images */}
-        <div className="space-y-4">
-          <div className="aspect-square overflow-hidden rounded-lg">
+        {/* Product Images - Fixed height container */}
+        <div className="flex flex-col h-[600px]">
+          <div className="flex-1 overflow-hidden rounded-lg ">
             <img
               src={product.images[0] || '/placeholder.svg'}
               alt={product.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-fill"
             />
           </div>
           {product.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.slice(1).map((image, index) => (
+            <div className="grid grid-cols-4 gap-2 h-20">
+              {product.images.slice(1, 5).map((image, index) => (
                 <div key={index} className="aspect-square overflow-hidden rounded">
                   <img
                     src={image}
@@ -200,23 +209,22 @@ const ProductDetail = () => {
           )}
         </div>
 
-        {/* Product Info with fixed height and scroll */}
-        <div className="space-y-6">
-          <div>
+        {/* Product Info - Matching height container */}
+        <div className="flex flex-col h-[600px]">
+          {/* Product Title and Price */}
+          <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {product.title}
             </h1>
-            <div className="flex items-center mb-2">
-              <span className="text-4xl font-extrabold text-primary mr-2">
+            <div className="flex items-center">
+              <span className="text-4xl font-extrabold text-primary">
                 ₹{Number(product.price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
           </div>
 
-          <div
-            className="bg-white rounded-lg shadow border p-4"
-            style={{ maxHeight: 350, overflowY: 'auto' }}
-          >
+          {/* Scrollable Content Area */}
+          <div className="flex-1 bg-white rounded-lg shadow border p-4 overflow-y-auto mb-6">
             <h3 className="text-lg font-semibold mb-2">Description</h3>
             <p className="text-gray-600 mb-4">{product.description || "No description available."}</p>
 
@@ -227,77 +235,37 @@ const ProductDetail = () => {
             {renderSpecification()}
 
             <h3 className="text-lg font-semibold mb-2">Availability</h3>
-            <Badge variant={product.stock > 0 ? "default" : "destructive"}>
+            <Badge variant={product.stock > 0 ? "default" : "destructive"} className="mb-4">
               {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
             </Badge>
 
-            <h3 className="text-lg font-semibold mb-2 mt-4">Seller</h3>
+            <h3 className="text-lg font-semibold mb-2">Seller</h3>
             <p className="text-gray-600">Mythri InnovoTech Solutions Pvt Ltd</p>
           </div>
 
-          <div className="flex space-x-4">
-            <Button 
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-              className="flex-1"
-            >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Add to Cart
-            </Button>
-            <Button 
-              variant="outline"
-              onClick={handleAddToWishlist}
-            >
-              <Heart className="h-4 w-4" />
-            </Button>
-          </div>
+          {/* Fixed Action Buttons at Bottom */}
+          {showCartButtons && (
+            <div className="flex space-x-4">
+              <Button 
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
+                className="flex-1"
+                size="lg"
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Add to Cart
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={handleAddToWishlist}
+                size="lg"
+              >
+                <Heart className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Auth Modal */}
-      <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
-        <DialogContent className="max-w-sm rounded-2xl shadow-lg">
-          <DialogHeader className="text-center space-y-2">
-            <DialogTitle className="text-xl font-semibold">
-              Welcome to <span className="text-primary">Safeguard Air</span>
-            </DialogTitle>
-            <p className="text-sm text-muted-foreground">
-              Please choose an option to continue
-            </p>
-          </DialogHeader>
-
-          <div className="mt-4 flex flex-row gap-4 justify-center items-start">
-            <div className="flex flex-col items-center flex-1">
-              <p className="mb-2 font-medium">Already a user?</p>
-              <Button
-                className="w-full"
-                size="lg"
-                onClick={() => {
-                  setShowAuthModal(false);
-                  navigate("/login");
-                }}
-              >
-                Login
-              </Button>
-            </div>
-
-            <div className="flex flex-col items-center flex-1">
-              <p className="mb-2 font-medium">New here?</p>
-              <Button
-                className="w-full bg-white text-black border border-gray-300 font-bold"
-                size="lg"
-                variant="outline"
-                onClick={() => {
-                  setShowAuthModal(false);
-                  navigate("/register");
-                }}
-              >
-                Create Account
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

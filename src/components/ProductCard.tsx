@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Product } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAppDispatch } from '@/store/hooks';
+import { openAuthModal } from '@/store/authModalSlice';
 import { api } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
 import { ShoppingCart, Heart } from 'lucide-react';
@@ -17,17 +18,16 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' }) => {
   const { user, token } = useAuth();
+  const dispatch = useAppDispatch();
 
   const addToCart = async () => {
+    // If not logged in, open auth modal
     if (!user || !token) {
-      toast({
-        title: "Error",
-        description: "Please login to add items to cart",
-        variant: "destructive",
-      });
+      dispatch(openAuthModal());
       return;
     }
 
+    // If logged in but not a buyer, show error
     if (user.role !== 'buyer') {
       toast({
         title: "Error",
@@ -57,15 +57,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
   };
 
   const addToWishlist = async () => {
+    // If not logged in, open auth modal
     if (!user || !token) {
-      toast({
-        title: "Error",
-        description: "Please login to add items to wishlist",
-        variant: "destructive",
-      });
+      dispatch(openAuthModal());
       return;
     }
 
+    // If logged in but not a buyer, show error
     if (user.role !== 'buyer') {
       toast({
         title: "Error",
@@ -94,6 +92,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
     }
   };
 
+  // Show cart/wishlist buttons for: not logged in OR logged in buyers (but not sellers)
+  const showCartButtons = !user || user.role === 'buyer';
+
   if (viewMode === 'list') {
     return (
       <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -116,7 +117,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
                   <div className="flex items-center space-x-3 mb-3">
                     <span className="text-sm text-gray-500">Stock: {product.stock}</span>
                   </div>
-
                 </div>
                 
                 <div className="text-right">
@@ -129,7 +129,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
                       </Button>
                     </Link>
                     
-                    {user?.role === 'buyer' && (
+                    {showCartButtons && (
                       <div className="flex space-x-2">
                         <Button onClick={addToCart} className="flex-1">
                           <ShoppingCart className="h-4 w-4 mr-1" />
@@ -158,7 +158,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        {user?.role === 'buyer' && (
+        {showCartButtons && (
           <Button
             variant="ghost"
             size="sm"
@@ -183,7 +183,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
           <span className="text-xs text-gray-500">Stock: {product.stock}</span>
         </div>
 
-
         <div className="flex gap-2">
           <Link to={`/products/${product._id}`} className="flex-1">
             <Button variant="outline" className="w-full" size="sm">
@@ -191,7 +190,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'grid' })
             </Button>
           </Link>
           
-          {user?.role === 'buyer' && (
+          {showCartButtons && (
             <Button onClick={addToCart} size="sm" className="flex-1">
               <ShoppingCart className="h-4 w-4 mr-1" />
               Add to Cart
