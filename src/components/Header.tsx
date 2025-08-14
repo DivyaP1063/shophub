@@ -9,10 +9,10 @@ const Header = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('https://safeguard-air-landing.onrender.com');
-  };
+const handleLogout = () => {
+  logout();
+  window.location.href = 'https://safeguard-air-landing.onrender.com';
+};
 
   return (
     <header className="bg-white shadow-sm border-b  w-full ">
