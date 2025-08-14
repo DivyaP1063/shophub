@@ -33,9 +33,9 @@ const Register = () => {
 
 
     const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
+    onSuccess: async (credentialResponse:any) => {
       try {
-        await login('', tokenResponse.access_token, true);
+        await login('', credentialResponse.credential, true);
         navigate('/');
       } catch (error) {
         console.error('Google login error:', error);
