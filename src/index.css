@@ -101,3 +101,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Force Google button to full width */
+.google-signin-full-width > div {
+  width: 100% !important;
+  display: block !important;
+}

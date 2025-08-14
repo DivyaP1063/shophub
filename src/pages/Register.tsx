@@ -97,16 +97,13 @@ const Register = () => {
             <div className="flex-grow h-px bg-gray-200" />
           </div>
 
-          <div className="w-full flex justify-center">
-            <div style={{ width: '100%' }}>
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() => console.log('Google Login Failed')}
-                width="100%"
-                shape="rect"        
-                size="large"
-              />
-            </div>
+          <div className="w-full flex justify-center google-signin-full-width">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => console.log('Google Login Failed')}
+              shape="rect"
+              size="large"
+            />
           </div>
 
           <div className="mt-6 text-center">
