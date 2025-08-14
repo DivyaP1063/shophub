@@ -11,7 +11,7 @@ const Header = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('https://safeguard-air-landing.onrender.com');
   };
 
   return (
