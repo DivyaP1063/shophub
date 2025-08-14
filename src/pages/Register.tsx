@@ -102,6 +102,10 @@ const Register = () => {
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() => console.log('Google Login Failed')}
+                width="100%"
+                theme="filled_white" // matches button style
+                shape="rect"        // keeps it rectangular
+                size="large"
               />
             </div>
           </div>
