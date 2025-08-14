@@ -91,7 +91,7 @@ const Login = () => {
                 onSuccess={handleGoogleLogin}
                 onError={() => console.log('Google Login Failed')}
                 width="100%"
-                theme="filled_white" // matches button style
+                theme="filled_blue" // matches button style
                 shape="rect"        // keeps it rectangular
                 size="large"        // makes it taller like your normal button
               />
