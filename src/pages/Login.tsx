@@ -77,13 +77,19 @@ const Login = () => {
               {loading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
-          
-          <div className="mt-6 flex flex-col items-center">
-            <div className="w-full">
+
+          {/* Professional separator */}
+          <div className="my-6 flex items-center">
+            <div className="flex-grow h-px bg-gray-200" />
+            <span className="mx-4 text-gray-500 font-medium">or</span>
+            <div className="flex-grow h-px bg-gray-200" />
+          </div>
+
+          <div className="w-full flex justify-center">
+            <div style={{ width: '100%' }}>
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() => console.log('Google Login Failed')}
-                width="100%" // Ensures full width
               />
             </div>
           </div>

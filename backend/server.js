@@ -23,14 +23,12 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(
   cors({
-    origin: "https://shophub-frontend.onrender.com",
+    origin: ["https://shophub-frontend.onrender.com", "http://localhost:8080"],
     credentials: true,
   })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 // Cloudinary configuration
 cloudinary.config({

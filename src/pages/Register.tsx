@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useAuth } from '@/contexts/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -14,13 +14,12 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('buyer');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
     try {
       await register(name, email, password, role);
       navigate('/');
@@ -28,6 +27,15 @@ const Register = () => {
       console.error('Registration error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    try {
+      await login('', credentialResponse.credential, true); // email not needed, pass credential and google flag
+      navigate('/');
+    } catch (error) {
+      console.error('Google login error:', error);
     }
   };
 
@@ -50,7 +58,6 @@ const Register = () => {
                 className="mt-1"
               />
             </div>
-            
             <div>
               <Label htmlFor="email">Email address</Label>
               <Input
@@ -62,7 +69,6 @@ const Register = () => {
                 className="mt-1"
               />
             </div>
-            
             <div>
               <Label htmlFor="password">Password</Label>
               <Input
@@ -75,7 +81,6 @@ const Register = () => {
                 className="mt-1"
               />
             </div>
-
             <Button
               type="submit"
               className="w-full"
@@ -84,7 +89,23 @@ const Register = () => {
               {loading ? 'Creating account...' : 'Create account'}
             </Button>
           </form>
-          
+
+          {/* Professional separator */}
+          <div className="my-6 flex items-center">
+            <div className="flex-grow h-px bg-gray-200" />
+            <span className="mx-4 text-gray-500 font-medium">or</span>
+            <div className="flex-grow h-px bg-gray-200" />
+          </div>
+
+          <div className="w-full flex justify-center">
+            <div style={{ width: '100%' }}>
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => console.log('Google Login Failed')}
+              />
+            </div>
+          </div>
+
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
