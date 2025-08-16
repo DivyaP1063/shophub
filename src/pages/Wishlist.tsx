@@ -119,7 +119,7 @@ const WishlistPage = () => {
               <CardContent className="p-4">
                 <h3 className="font-semibold text-lg mb-1 line-clamp-2">{product.title}</h3>
                 <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
-                <p className="text-lg font-bold text-primary mb-3">${product.price}</p>
+                <p className="text-lg font-bold text-primary mb-3">₹{product.price}</p>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs text-gray-500">Stock: {product.stock}</span>
                 </div>
