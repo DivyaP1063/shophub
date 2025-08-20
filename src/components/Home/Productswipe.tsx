@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Product1 from "@/assets/productImg2.avif";
 import Product2 from "@/assets/productImg3.avif";
+import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,15 +42,7 @@ const products = [
 const Productswipe: React.FC = () => {
   const productRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  const handleScroll = (id: number) => {
-    const element = document.getElementById("home");
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 50,
-        behavior: "auto",
-      });
-    }
-  };
+
 
   useEffect(() => {
     productRefs.current.forEach((item, index) => {
@@ -105,7 +98,6 @@ const Productswipe: React.FC = () => {
                 >
                   {/* Image Section */}
                   <div
-                    onClick={() => handleScroll(product.id)}
                     className="product-img w-full md:w-[45%] flex justify-center items-center"
                   >
                     <img
@@ -127,12 +119,12 @@ const Productswipe: React.FC = () => {
                       {product.description}
                     </p>
                     <div>
-                      <div
-                        onClick={() => handleScroll(product.id)}
-                        className="mt-4 px-4 py-2 font-bold cursor-pointer rounded text-white hover:text-gray-200 hover:scale-105 transition-all duration-200 ease-in-out bg-primary mx-auto md:mx-0 w-fit"
-                      >
-                        Read More
-                      </div>
+                      <Link to="/products">
+                        <span className="mt-4 px-4 py-2 font-bold cursor-pointer rounded text-white hover:text-gray-200 hover:scale-105 transition-all duration-200 ease-in-out bg-primary mx-auto md:mx-0 w-fit">
+                          Read More
+                        </span>
+                      </Link>
+
                       <div className="h-[1px] w-[60%] bg-green mt-4 mx-auto md:mx-0"></div>
                     </div>
                   </div>

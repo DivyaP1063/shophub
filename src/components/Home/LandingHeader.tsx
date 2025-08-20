@@ -105,7 +105,7 @@ const LandingHeader: React.FC<HeaderProps> = ({ navType }) => {
                   className={`flex items-center gap-2 cursor-pointer rounded-3xl transition-all duration-300${
                     item.id === 'contactus'
                       ? ' px-5 py-2 bg-gray-300 text-black hover:bg-gray-700 hover:text-white'
-                      : ' p-2 text-white'
+                      : ' p-2 text-white hover:text-blue-300'
                   }`}
                   onClick={() => setMenuOpen(false)}
                 >
@@ -113,7 +113,7 @@ const LandingHeader: React.FC<HeaderProps> = ({ navType }) => {
                 </Link>
               ) : (
                 <div
-                  className="flex p-2 items-center gap-2 cursor-pointer text-white transition-all hover:border-1 hover:rounded-2xl duration-300"
+                  className="flex p-2 hover:text-blue-300 items-center gap-2 cursor-pointer text-white transition-all hover:border-1 hover:rounded-2xl duration-300"
                   onClick={() => handleScroll(item.id)}
                 >
                   {item.name}
