@@ -1,13 +1,17 @@
-
 import Header from "../components/Header";
-
-import { Outlet } from "react-router-dom"; 
+import LandingHeader from "../components/Home/LandingHeader";
+import { Outlet, useLocation } from "react-router-dom";
 
 const Layout = () => {
+  const location = useLocation();
+  const showLandingHeader =
+    location.pathname === "/" ||
+    location.pathname === "/aboutus" ||
+    location.pathname === "/contactus";
+
   return (
-    <div className="w-screen max-w-full  min-h-screen ">
-    
-      <Header />
+    <div className="w-screen max-w-full min-h-screen">
+      {showLandingHeader ? <LandingHeader /> : <Header />}
       <main>
         <Outlet />
       </main>

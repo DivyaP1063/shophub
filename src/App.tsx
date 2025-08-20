@@ -30,6 +30,9 @@ import AdminRegister from "./pages/AdminRegister";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import SellerOrders from "./pages/seller/SellerOrders";
 import AuthModal from "./components/Authmodal";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
+import ScrollToTop from "./lib/ScrollToTop";
 
 const queryClient = new QueryClient();
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -41,9 +44,12 @@ const AppContent = () => {
 
   return (
     <>
+    <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="aboutus" element={<AboutUs />} />
+          <Route path="contactus" element={<ContactUs />} />
           <Route path="login" element={<Login />} />
           <Route path="Admin" element={<Admin />} />
           <Route path="register" element={<Register />} />

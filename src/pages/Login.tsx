@@ -90,9 +90,7 @@ const Login = () => {
             <GoogleLogin
               onSuccess={handleGoogleLogin}
               onError={() => console.log("Google Login Failed")}
-              shape="rect"
               size="large"
-              theme="filled_white"
               width="100%" // Ask Google for full width
             />
           </div>

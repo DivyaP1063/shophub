@@ -7,6 +7,7 @@ import ProductCard from '@/components/ProductCard';
 import { Search, Filter, Grid, List } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchProducts } from '@/store/productsSlice';
+import Header from '@/components/Header';
 
 const Products = () => {
   const dispatch = useAppDispatch();
@@ -55,6 +56,7 @@ const Products = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">SafeGuard Devices</h1>
         <p className="text-gray-600">Discover the latest devices</p>
