@@ -1,9 +1,9 @@
 import React from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import bannerLarge from "@/assets/bannerLarge.avif";
-import bannerMedium from "@/assets/bannerMedium.avif";
-import bannerSmall from "@/assets/bannerSmall.avif";
+import bannerLarge from "@/assets/Bannerlarge.avif";
+import bannerMedium from "@/assets/Bannermedium.avif";
+import bannerSmall from "@/assets/Bannersmall.avif";
 
 const Herosection: React.FC = () => {
   useGSAP(() => {
