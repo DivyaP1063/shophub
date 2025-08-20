@@ -172,62 +172,111 @@ POST /api/auth/logout
 
 # Google OAuth
 GET /api/auth/google
-
+```
 
 ---
 
 ## 📁 Project Structure
 
 ```
-safeguard-air/
-├── src/
-│   ├── components/           # Reusable UI components
-│   │   ├── ui/              # ShadCN UI components
-│   │   ├── Home/            # Landing page components
-│   │   │   ├── Header.tsx
-│   │   │   ├── Herosection.tsx
-│   │   │   ├── BentoGrid.tsx
-│   │   │   ├── ScrollStackEffect.tsx
-│   │   │   ├── Newsletter.tsx
-│   │   │   └── Footer.tsx
-│   │   ├── auth/            # Authentication components
-│   │   │   ├── LoginForm.tsx
-│   │   │   ├── RegisterForm.tsx
-│   │   │   ├── GoogleAuthButton.tsx
-│   │   │   └── AuthModal.tsx
-│   │   └── common/          # Shared components
-│   ├── pages/               # Page components
-│   │   ├── Home.tsx
-│   │   ├── Products.tsx
-│   │   ├── AboutUs.tsx
-│   │   ├── ContactUs.tsx
-│   │   ├── Login.tsx
-│   │   └── Register.tsx
-│   ├── store/               # Redux store
-│   │   ├── authSlice.ts     # Authentication state
-│   │   └── index.ts
-│   ├── hooks/               # Custom React hooks
-│   │   ├── useAuth.ts       # Authentication hook
-│   │   └── useGoogleAuth.ts # Google Auth hook
-│   ├── utils/               # Utility functions
-│   │   ├── auth.ts          # Auth helpers
-│   │   └── googleAuth.ts    # Google Auth config
-│   ├── assets/              # Static assets (images, icons)
-│   └── styles/              # Global styles
-├── public/                  # Public static files
-├── server/                  # Backend API
-│   ├── routes/
-│   │   ├── auth.js          # Authentication routes
-│   │   └── oauth.js         # Google OAuth routes
-│   ├── middleware/
-│   │   ├── auth.js          # JWT middleware
-│   │   └── passport.js      # Passport configuration
-│   └── models/
-│       └── User.js          # User model with Google fields
-├── package.json
-├── vite.config.ts
-├── tailwind.config.ts
-└── README.md
+Air_Quality/
+├── components.json          # ShadCN UI components config
+├── eslint.config.js        # ESLint configuration
+├── index.html              # Main HTML template
+├── package.json            # Frontend dependencies
+├── postcss.config.js       # PostCSS configuration
+├── README.md               # Project documentation
+├── tailwind.config.ts      # TailwindCSS configuration
+├── tsconfig.app.json       # TypeScript app config
+├── tsconfig.json           # TypeScript configuration
+├── tsconfig.node.json      # TypeScript Node config
+├── vite.config.ts          # Vite build configuration
+├── backend/                # Backend API server
+│   ├── package.json        # Backend dependencies
+│   ├── README.md           # Backend documentation
+│   ├── server.js           # Express server entry point
+│   ├── agent/              # AI/Chatbot agent
+│   │   ├── agent.json      # Agent configuration
+│   │   ├── entities/       # NLP entities
+│   │   └── intents/        # NLP intents
+│   ├── config/             # Configuration files
+│   │   └── razorpay.js     # Payment gateway config
+│   ├── controllers/        # Route controllers
+│   │   ├── authController.js       # Authentication logic
+│   │   ├── cartController.js       # Shopping cart logic
+│   │   ├── orderController.js      # Order management
+│   │   ├── productController.js    # Product management
+│   │   └── wishlistController.js   # Wishlist functionality
+│   ├── middleware/         # Express middleware
+│   │   └── auth.js         # JWT authentication middleware
+│   ├── models/             # MongoDB models
+│   │   ├── Cart.js         # Shopping cart schema
+│   │   ├── Order.js        # Order schema
+│   │   ├── Product.js      # Product schema
+│   │   ├── User.js         # User schema
+│   │   └── Wishlist.js     # Wishlist schema
+│   └── routes/             # API routes
+│       ├── auth.js         # Authentication routes
+│       ├── cart.js         # Shopping cart routes
+│       ├── orders.js       # Order management routes
+│       ├── products.js     # Product routes
+│       ├── webhookRoutes.js # Webhook handlers
+│       └── wishlist.js     # Wishlist routes
+├── public/                 # Static assets
+│   ├── _redirects          # Netlify redirects
+│   ├── favicon.png         # Site favicon
+│   ├── placeholder.svg     # Placeholder images
+│   ├── robots.txt          # SEO robots file
+│   ├── sitemap.xml         # SEO sitemap
+│   └── vite.svg            # Vite logo
+└── src/                    # Frontend source code
+    ├── App.css             # Global app styles
+    ├── App.tsx             # Main App component
+    ├── index.css           # Global CSS styles
+    ├── main.tsx            # React entry point
+    ├── vite-env.d.ts       # Vite type definitions
+    ├── assets/             # Static assets (images, logos)
+    │   ├── Bannerlarge.avif        # Hero banners
+    │   ├── Bannermedium.avif
+    │   ├── Bannersmall.avif
+    │   ├── darkPrimaryLogo.avif    # Brand logos
+    │   ├── HdarkLogo.avif
+    │   ├── HlightLogo.avif
+    │   ├── productImg.avif         # Product images
+    │   ├── productImg2.avif
+    │   ├── productImg3.avif
+    │   └── ... (more assets)
+    ├── components/         # Reusable UI components
+    │   ├── AppSidebar.tsx          # Application sidebar
+    │   ├── Authmodal.tsx           # Authentication modal
+    │   ├── DashboardLayout.tsx     # Admin dashboard layout
+    │   ├── Header.tsx              # Site header
+    │   ├── OrderManagement.tsx     # Order management UI
+    │   ├── ProductCard.tsx         # Product card component
+    │   ├── ProductManagement.tsx   # Product management UI
+    │   ├── Home/                   # Landing page components
+    │   └── ui/                     # ShadCN UI components
+    ├── contexts/           # React contexts
+    │   └── AuthContext.tsx         # Authentication context
+    ├── data/               # Static data files
+    │   └── features.ts             # Feature configurations
+    ├── hooks/              # Custom React hooks
+    │   ├── use-mobile.tsx          # Mobile detection hook
+    │   ├── use-toast.ts            # Toast notifications hook
+    │   ├── useAppDispatch.ts       # Redux dispatch hook
+    │   └── useAppSelector.ts       # Redux selector hook
+    ├── lib/                # Utility libraries
+    │   ├── api.ts                  # API client configuration
+    │   ├── ScrollToTop.tsx         # Scroll to top utility
+    │   └── utils.ts                # General utilities
+    ├── pages/              # Page components
+    │   ├── AboutUs.tsx             # About page
+    │   ├── AddProduct.tsx          # Add product page
+    │   ├── Admin.tsx               # Admin dashboard
+    │   └── ... (more pages)
+    ├── store/              # Redux store configuration
+    ├── types/              # TypeScript type definitions
+    └── ... (additional directories)
 ```
 
 ---
@@ -526,7 +575,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **Vite:** For blazing fast development
 - **Cloudinary:** For image management
 - **Razorpay:** For payment processing
-
 
 ---
 
